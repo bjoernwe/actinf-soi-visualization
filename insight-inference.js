@@ -53,9 +53,6 @@
       ],
     },
     {
-      // Entry: attention turns toward the incoming stream. Sensory inflow rises
-      // and more detail survives prediction (g2 up climbs); the object-related
-      // selfing loop begins to loosen (g1 up eases from high to med).
       short: 'Entry',
       streams: {
         g0: { down: 'med',  up: 'low'  },
@@ -70,6 +67,17 @@
         { gap: 'g2', side: 'right', tag: 'Perceived Details (1)', body: 'Increased prediction error due to attention.' },
         { tier: 'sense', icon: '🧘', body: 'Attention (i.e., increased precision) is placed on the sensory input.' },
         { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
+      ],
+    },
+    {
+      short: 'A&P',
+      streams: {
+        g0: { down: 'med',  up: 'low' },
+        g1: { down: 'med', up: 'low' },
+        g2: { down: 'high', up: 'high' },
+      },
+      intake: { in: 'med', out: 'low' }, jit: 2, spd: 1.35,
+      comments: [
       ],
     },
   ];
