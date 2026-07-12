@@ -74,6 +74,29 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 #tier-self-low  { top: 214px; }
 #tier-object    { top: 404px; }
 #tier-sense     { top: 594px; }
+/* ---------- comment slots ---------- */
+.comment {
+  position: absolute; z-index: 3;
+  transform: translateY(-50%);
+  max-width: 300px;
+  padding: 11px 15px 12px;
+  background: linear-gradient(180deg, rgba(28,33,54,.82), rgba(24,29,49,.82));
+  border: 1px solid var(--card-edge);
+  border-left: 2px solid var(--card-edge);
+  border-radius: 9px;
+  backdrop-filter: blur(2px);
+}
+.comment.err  { border-left-color: var(--err); }
+.comment.pred { border-left-color: var(--pred); }
+.comment .comment-tag {
+  font-family: "Spline Sans Mono", monospace;
+  font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
+  margin-bottom: 5px;
+}
+.comment.err  .comment-tag { color: var(--err); }
+.comment.pred .comment-tag { color: var(--pred); }
+.comment p { font-size: 13px; line-height: 1.46; color: var(--vellum); }
+
 .stream-label {
   position: absolute; bottom: 6px; left: 0; right: 0; text-align: center;
   font-family: "Spline Sans Mono", monospace; font-size: 10.5px; letter-spacing: .12em;

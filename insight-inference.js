@@ -17,6 +17,10 @@
 
   const el = id => document.getElementById(id);
 
+  /* how far the pred/err streams sit from a gap's center, as a fraction of tier
+     width. Smaller = streams hug the center, leaving side room for comment slots. */
+  const STREAM_OFF = 0.05;
+
   /* ---------------- colors ---------------- */
   const C = { pred: [139, 158, 232], err: [232, 140, 74] };
   const rgba = (c, a) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
@@ -45,8 +49,34 @@
     W = diagram.clientWidth; H = diagram.clientHeight;
     canvas.width = W * dpr; canvas.height = H * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    layoutComments();
   }
   window.addEventListener('resize', resize);
+
+  /* ---------------- comment slots ---------------- */
+  // A tier's box in diagram-local coords.
+  function tierBox(t) {
+    const dRect = diagram.getBoundingClientRect();
+    const b = t.getBoundingClientRect();
+    return { top: b.top - dRect.top, bot: b.bottom - dRect.top, left: b.left - dRect.left, right: b.right - dRect.left };
+  }
+  // Pin each comment into the free space beside its gap's stream.
+  function layoutComments() {
+    // Place a comment beside a gap's error stream (right of center).
+    const errComment = (id, upper, lower) => {
+      const a = tierBox(upper), b = tierBox(lower);
+      const cx = (b.left + b.right) / 2, w = b.right - b.left;
+      const left = cx + w * STREAM_OFF + 18;
+      const box = el(id);
+      box.style.top = ((a.bot + b.top) / 2) + 'px';
+      box.style.left = left + 'px';
+      box.style.width = (b.right - left) + 'px';
+    };
+    errComment('comment-high-err', tiers[0], tiers[1]); // self-deep ↔ self-low
+    errComment('comment-mid-err',  tiers[1], tiers[2]); // self-low ↔ object
+    errComment('comment-low-err',  tiers[2], tiers[3]); // object ↔ sensory
+  }
+
   resize();
 
   function geom() {
@@ -57,7 +87,7 @@
     });
     const cx = (r[0].left + r[0].right) / 2;
     const w = r[0].right - r[0].left;
-    const predX = cx - w * 0.18, errX = cx + w * 0.18;
+    const predX = cx - w * STREAM_OFF, errX = cx + w * STREAM_OFF;
     const gaps = [];
     for (let i = 0; i < r.length - 1; i++) {
       gaps.push({ top: r[i].bot + 6, bot: r[i + 1].top - 6, predX, errX });
