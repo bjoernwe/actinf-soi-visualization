@@ -203,6 +203,25 @@
     for (const { def, box } of activeComments) placeComment(box, def.gap, def.side);
   }
 
+  // Inline emphasis for comment bodies: *word* -> a stressed span. The body is
+  // set in italic serif, so .stress reads by standing upright (see CSS), the
+  // inverse of markdown's usual italic. Split on '*' and alternate plain text /
+  // emphasis (odd fragments are inside a pair); each fragment is written as a
+  // text node, so an authored string can never inject markup.
+  function fillBody(p, text) {
+    text.split('*').forEach((frag, i) => {
+      if (!frag) return;
+      if (i % 2) {
+        const em = document.createElement('em');
+        em.className = 'stress';
+        em.textContent = frag;
+        p.appendChild(em);
+      } else {
+        p.appendChild(document.createTextNode(frag));
+      }
+    });
+  }
+
   // Build and place the comment boxes for a stage. Rebuilt on each stage change,
   // so text, count, and placement can all differ from stage to stage.
   const commentLayer = el('comments');
@@ -216,7 +235,7 @@
       tag.className = 'comment-tag';
       tag.textContent = def.tag;
       const p = document.createElement('p');
-      p.textContent = def.body;
+      fillBody(p, def.body);
       box.append(tag, p);
       commentLayer.appendChild(box);
       return { def, box };

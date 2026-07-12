@@ -137,6 +137,10 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
   font-style: italic; font-weight: 340;
   font-size: 14.5px; line-height: 1.5; color: var(--vellum);
 }
+/* Authored emphasis (*word* in a comment body). The body is already italic,
+   so a stressed word reads by standing *upright* — the inverse of markdown's
+   usual italic — with a touch more weight. */
+.comment p .stress { font-style: normal; font-weight: 500; }
 
 /* Comments are rebuilt on every stage change, so this entrance replays each
    time: the commentary settles in anew while the structure stays put. */
