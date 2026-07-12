@@ -116,6 +116,20 @@
         { gap: 'g0', side: 'right', tag: 'Deep Self Structures Destabilized', body: 'Increasingly deep layers of self are under pressure. Like Fear, Misery, Disgust. Very unpleasant.' },
       ],
     },
+    {
+      short: 'Re-Observation',
+      streams: {
+        g0: { down: 'high', up: 'high' },
+        g1: { down: 'med', up: 'high' },
+        g2: { down: 'med', up: 'med' },
+      },
+      intake: { in: 'med', out: 'low' }, jit: 2.4, spd: 1.6,
+      comments: [
+        { tier: 'self-high', icon: '💡', body: 'Under constant update pressure, the deeper layers sometimes manage to re-establish new (and deep) meta-cognitive predictions about what\'s going on.' },
+        { tier: 'self-low', icon: '🧘', body: 'The practitioner has to relax despite the discomfort.' },
+        { tier: 'sense', icon: '🧘', body: 'The practitioner has to maintain a focus on sensory details to keep the error stream going.' },
+      ],
+    },
   ];
 
   const GAPS = ['g0', 'g1', 'g2'];
