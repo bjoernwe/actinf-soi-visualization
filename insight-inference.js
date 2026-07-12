@@ -53,9 +53,6 @@
       ],
     },
     {
-      // Entry: attention turns toward the incoming stream. Sensory inflow rises
-      // and more detail survives prediction (g2 up climbs); the object-related
-      // selfing loop begins to loosen (g1 up eases from high to med).
       short: 'Entry',
       streams: {
         g0: { down: 'med',  up: 'low'  },
@@ -70,6 +67,22 @@
         { gap: 'g2', side: 'right', tag: 'Perceived Details (1)', body: 'Increased prediction error due to attention.' },
         { tier: 'sense', icon: '🧘', body: 'Attention (i.e., increased precision) is placed on the sensory input.' },
         { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
+      ],
+    },
+    {
+      short: 'A&P',
+      streams: {
+        g0: { down: 'med',  up: 'low' },
+        g1: { down: 'med', up: 'med' },
+        g2: { down: 'high', up: 'high' },
+      },
+      intake: { in: 'med', out: 'low' }, jit: 2, spd: 1.35,
+      comments: [
+        { tier: 'self-low', icon: '🧘', body: 'Self is still stable enough to not escalate upwards. Instead, it grasps for the pleasant (but unstable) objects.' },
+        { gap: 'g1', side: 'right', tag: 'Upwards Error Propagation', body: 'Since objects are fluid now, update pressure on self increases.' },
+        { tier: 'object', icon: '💡', body: 'Unlike every-day objects, these now are extremely fluid and rich in detail' },
+        { gap: 'g2', side: 'left', tag: 'Adjusted Object Predictions', body: 'Since object layer is still constraint by self-preferences, it grabs a local minima - which is *pleasant*.' },
+        { gap: 'g2', side: 'right', tag: 'Constant Destabilization', body: 'The constant error stream has destabilized the object layer.' },
       ],
     },
   ];
@@ -111,6 +124,10 @@
   const nextBtn = document.getElementById('next-stage');
   prevBtn.addEventListener('click', () => setStage(cur - 1));
   nextBtn.addEventListener('click', () => setStage(cur + 1));
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') setStage(cur - 1);
+    else if (e.key === 'ArrowRight') setStage(cur + 1);
+  });
 
   const el = id => document.getElementById(id);
 
