@@ -33,7 +33,35 @@
         g1: { down: 'high', up: 'high' },
         g2: { down: 'med', up: 'low'  },
       },
-      intake: { in: 'med', out: 'low' }, jit: 1.5, spd: 1,
+      intake: { in: 'med', out: 'med' }, jit: 1.5, spd: 1,
+      // Per-stage annotations. Each entry anchors to a region + side:
+      //   gap:  'g0' | 'g1' | 'g2' | 'intake'
+      //   side: 'right' (err / sensory-inflow side) | 'left' (pred / action side)
+      // Add, drop, or move entries freely — count and placement can differ per stage.
+      comments: [
+        { gap: 'g0', side: 'right', tag: 'Deeper Self Auto-Pilot', body: 'During every-day baseline, deeper self structures are semi-relaxed, slightly re-confirming and rarely updating.' },
+        { gap: 'g1', side: 'right', tag: 'High Object-Related Selfing', body: 'The tightest inference loop happens between self layer and everyday objects.' },
+        { gap: 'g2', side: 'right', tag: 'Details Predicted Away', body: 'Most sensory details are predicted away.' },
+        { gap: 'intake', side: 'left', tag: 'Outward Actions', body: 'Actions are modeled as active inference on the outside.' },
+      ],
+    },
+    {
+      // Entry: attention turns toward the incoming stream. Sensory inflow rises
+      // and more detail survives prediction (g2 up climbs); the object-related
+      // selfing loop begins to loosen (g1 up eases from high to med).
+      short: 'Entry',
+      streams: {
+        g0: { down: 'med',  up: 'low'  },
+        g1: { down: 'med', up: 'med'  },
+        g2: { down: 'med',  up: 'high'  },
+      },
+      intake: { in: 'med', out: 'low' }, jit: 1.3, spd: 1,
+      comments: [
+        { gap: 'g1', side: 'left', tag: 'Sitting With Change', body: 'Preferences are relaxed around how objects *should* be.' },
+        { gap: 'g2', side: 'left', tag: 'Perceived Details (1)', body: 'Object layer adjusts to predict sensory input in more detail.' },
+        { gap: 'g2', side: 'right', tag: '💡 Perceived Details (2)', body: 'Attention (i.e., increased precision) leads to more prediction errors.' },
+        { gap: 'intake', side: 'left', tag: '💡 Sitting Still',  body: 'Active inference (action) on the environment is minimal.' },
+      ],
     },
   ];
 
@@ -69,6 +97,12 @@
     if (b) setStage(+b.dataset.i);
   });
 
+  /* prev / next navigation */
+  const prevBtn = document.getElementById('prev-stage');
+  const nextBtn = document.getElementById('next-stage');
+  prevBtn.addEventListener('click', () => setStage(cur - 1));
+  nextBtn.addEventListener('click', () => setStage(cur + 1));
+
   const el = id => document.getElementById(id);
 
   /* how far the pred/err streams sit from a gap's center, as a fraction of tier
@@ -88,7 +122,10 @@
     if (i < 0 || i >= STAGES.length || i === cur) return;
     cur = i;
     target = resolveStage(STAGES[i]);
+    renderComments(STAGES[i]);
     [...rail.children].forEach((li, j) => li.classList.toggle('active', j === i));
+    prevBtn.disabled = i <= 0;
+    nextBtn.disabled = i >= STAGES.length - 1;
   }
 
   /* ---------------- canvas ---------------- */
@@ -114,34 +151,62 @@
     const b = t.getBoundingClientRect();
     return { top: b.top - dRect.top, bot: b.bottom - dRect.top, left: b.left - dRect.left, right: b.right - dRect.left };
   }
-  // Pin each comment into the free space beside its gap's up-stream. Clear the
-  // widest a high-intensity band can reach so a broad stream never overlaps it.
-  function layoutComments() {
-    const errComment = (id, upper, lower) => {
-      const a = tierBox(upper), b = tierBox(lower);
-      const cx = (b.left + b.right) / 2, w = b.right - b.left;
-      const left = cx + w * STREAM_OFF + MAX_BREADTH + 20;
-      const box = el(id);
-      box.classList.add('pin-left'); // box sits right of the stream: accent faces left, inward
-      box.style.top = ((a.bot + b.top) / 2) + 'px';
-      box.style.left = left + 'px';
-      box.style.width = (b.right - left) + 'px';
-    };
-    errComment('comment-high-err', tiers[0], tiers[1]); // self-deep ↔ self-low
-    errComment('comment-mid-err',  tiers[1], tiers[2]); // self-low ↔ object
-    errComment('comment-low-err',  tiers[2], tiers[3]); // object ↔ sensory
+  // Vertical center (diagram coords) of a gap or the intake region.
+  function regionCenterY(gap) {
+    if (gap === 'intake') {
+      const s = tierBox(tiers[tiers.length - 1]);
+      return (s.bot + (H - 26)) / 2;
+    }
+    const i = +gap[1];
+    return (tierBox(tiers[i]).bot + tierBox(tiers[i + 1]).top) / 2;
+  }
 
-    // The outgoing (action) stream lives in the intake region below the sensory
-    // tier, on the pred (left) side. Pin its comment into the free space to its
-    // left, clearing the widest a band could reach.
-    const s = tierBox(tiers[3]);
-    const cx = (s.left + s.right) / 2, w = s.right - s.left;
-    const right = cx - w * STREAM_OFF - MAX_BREADTH - 20;
-    const outBox = el('comment-intake-out');
-    outBox.classList.add('pin-right'); // box sits left of the stream: accent faces right, inward
-    outBox.style.top = ((s.bot + (H - 26)) / 2) + 'px';
-    outBox.style.left = s.left + 'px';
-    outBox.style.width = (right - s.left) + 'px';
+  // Pin a comment beside its stream. The accent edge always faces inward, toward
+  // the stream: a box on the right side gets pin-left, one on the left gets
+  // pin-right. Clear the widest a high-intensity band can reach so a broad stream
+  // never overlaps it. All tiers share one horizontal box, so tiers[0] suffices.
+  function placeComment(box, gap, side) {
+    const t = tierBox(tiers[0]);
+    const cx = (t.left + t.right) / 2, w = t.right - t.left;
+    box.style.top = regionCenterY(gap) + 'px';
+    box.classList.remove('pin-left', 'pin-right');
+    if (side === 'left') {
+      const right = cx - w * STREAM_OFF - MAX_BREADTH - 20;
+      box.classList.add('pin-right'); // box left of stream: accent faces right, inward
+      box.style.left = t.left + 'px';
+      box.style.width = (right - t.left) + 'px';
+    } else {
+      const left = cx + w * STREAM_OFF + MAX_BREADTH + 20;
+      box.classList.add('pin-left'); // box right of stream: accent faces left, inward
+      box.style.left = left + 'px';
+      box.style.width = (t.right - left) + 'px';
+    }
+  }
+
+  // Re-position the current stage's comment boxes (on stage change + resize).
+  function layoutComments() {
+    for (const { def, box } of activeComments) placeComment(box, def.gap, def.side);
+  }
+
+  // Build and place the comment boxes for a stage. Rebuilt on each stage change,
+  // so text, count, and placement can all differ from stage to stage.
+  const commentLayer = el('comments');
+  let activeComments = [];
+  function renderComments(stage) {
+    commentLayer.innerHTML = '';
+    activeComments = (stage.comments || []).map(def => {
+      const box = document.createElement('aside');
+      box.className = 'comment';
+      const tag = document.createElement('div');
+      tag.className = 'comment-tag';
+      tag.textContent = def.tag;
+      const p = document.createElement('p');
+      p.textContent = def.body;
+      box.append(tag, p);
+      commentLayer.appendChild(box);
+      return { def, box };
+    });
+    layoutComments();
   }
 
   resize();

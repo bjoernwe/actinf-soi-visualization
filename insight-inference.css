@@ -60,6 +60,18 @@ nav.rail { position: sticky; top: 24px; }
 .rail button.stage-link:hover { color: var(--vellum); }
 .rail button.stage-link:focus-visible { outline: 2px solid var(--pred); outline-offset: 3px; border-radius: 3px; }
 
+/* ---------- prev / next navigation ---------- */
+.rail-nav { display: flex; gap: 8px; margin-top: 22px; padding-left: 2px; }
+.rail-nav-btn {
+  flex: 1; background: none; cursor: pointer;
+  border: 1px solid var(--card-edge); border-radius: 7px; color: var(--vellum);
+  font-family: "Spline Sans Mono", monospace; font-size: 11.5px; letter-spacing: .04em;
+  padding: 7px 6px; transition: border-color .25s, color .25s, opacity .25s;
+}
+.rail-nav-btn:hover:not(:disabled) { border-color: var(--err); color: var(--err); }
+.rail-nav-btn:focus-visible { outline: 2px solid var(--pred); outline-offset: 2px; }
+.rail-nav-btn:disabled { opacity: .32; cursor: default; }
+
 /* ---------- diagram ---------- */
 .diagram { position: relative; height: 820px; border-radius: 14px; }
 canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
@@ -81,6 +93,8 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
    pin-right for one to its left (both set from live geometry in JS). The
    accent is a neutral note colour, not tied to the pred/err streams, since a
    single comment may speak to both. */
+.comments { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
+.comments .comment { pointer-events: auto; }
 .comment {
   position: absolute; z-index: 3;
   transform: translateY(-50%);
