@@ -118,6 +118,14 @@
   const live = resolveStage(STAGES[0]);
   let target = resolveStage(STAGES[0]);
 
+  /* URL hash <-> stage. Each stage gets a slug (from its `short` name) so the
+     current stage survives a refresh and is shareable/bookmarkable. */
+  const slug = s => s.short.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  function stageFromHash() {
+    const h = decodeURIComponent(location.hash.replace(/^#/, ''));
+    return STAGES.findIndex(s => slug(s) === h);
+  }
+
   function setStage(i) {
     if (i < 0 || i >= STAGES.length || i === cur) return;
     cur = i;
@@ -126,7 +134,14 @@
     [...rail.children].forEach((li, j) => li.classList.toggle('active', j === i));
     prevBtn.disabled = i <= 0;
     nextBtn.disabled = i >= STAGES.length - 1;
+    location.hash = slug(STAGES[i]);
   }
+
+  // Back/forward and manual hash edits move the stage too.
+  window.addEventListener('hashchange', () => {
+    const i = stageFromHash();
+    if (i >= 0) setStage(i);
+  });
 
   /* ---------------- canvas ---------------- */
   const canvas = el('flow');
@@ -327,6 +342,7 @@
     requestAnimationFrame(frame);
   }
 
-  setStage(0);
+  const initial = stageFromHash();
+  setStage(initial >= 0 ? initial : 0);
   requestAnimationFrame(frame);
 })();
