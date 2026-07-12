@@ -55,7 +55,7 @@
     {
       short: 'Entry',
       streams: {
-        g0: { down: 'med',  up: 'low'  },
+        g0: { down: 'low',  up: 'low'  },
         g1: { down: 'med', up: 'med'  },
         g2: { down: 'med',  up: 'high'  },
       },
@@ -65,7 +65,7 @@
         { tier: 'object', icon: '💡', body: 'Objects start to become more fluid and interesting.' },
         { gap: 'g2', side: 'left', tag: 'Perceived Details (2)', body: 'Object layer adjusts to predict sensory input in more detail.' },
         { gap: 'g2', side: 'right', tag: 'Perceived Details (1)', body: 'Increased prediction error due to attention.' },
-        { tier: 'sense', icon: '🧘', body: 'Attention (i.e., increased precision) is placed on the sensory input.' },
+        { tier: 'sense', icon: '🧘', body: 'Attention (i.e., increased precision) is placed on sensory input.' },
         { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
       ],
     },
@@ -78,11 +78,25 @@
       },
       intake: { in: 'med', out: 'low' }, jit: 2, spd: 1.35,
       comments: [
-        { tier: 'self-low', icon: '🧘', body: 'Self is still stable enough to not escalate upwards. Instead, it grasps for the pleasant (but unstable) objects.' },
+        { tier: 'self-low', icon: '🧘', body: 'Self is still stable enough to not escalate upwards. Instead, it stabilizes downwards by grasping for the pleasant (but unstable) objects.' },
         { gap: 'g1', side: 'right', tag: 'Upwards Error Propagation', body: 'Since objects are fluid now, update pressure on self increases.' },
         { tier: 'object', icon: '💡', body: 'Unlike every-day objects, these now are extremely fluid and rich in detail' },
         { gap: 'g2', side: 'left', tag: 'Adjusted Object Predictions', body: 'Since object layer is still constraint by self-preferences, it grabs a local minima - which is *pleasant*.' },
         { gap: 'g2', side: 'right', tag: 'Constant Destabilization', body: 'The constant error stream has destabilized the object layer.' },
+      ],
+    },
+    {
+      short: 'Dissolution',
+      streams: {
+        g0: { down: 'med',  up: 'med' },
+        g1: { down: 'med', up: 'high' },
+        g2: { down: 'med', up: 'high' },
+      },
+      intake: { in: 'med', out: 'low' }, jit: 2.4, spd: 1.6,
+      comments: [
+        { gap: 'g0', side: 'right', tag: 'Objects Lost', body: 'Deeper self layers start to get update pressure as well. It starts to get uncomfortable.' },
+        { gap: 'g1', side: 'left', tag: 'Objects Lost', body: 'Predictions can not keep pace with continuous update pressure. Objects dissolve.' },
+        { gap: 'g1', side: 'right', tag: 'Self Under Pressure', body: 'Continuous updates (i.e., dissolution) to object layer increase pressure on self.' },
       ],
     },
   ];
