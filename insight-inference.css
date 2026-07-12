@@ -77,9 +77,14 @@ nav.rail { position: sticky; top: 24px; }
 canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 .tier {
   position: absolute; left: 12%; width: 76%;
-  background: linear-gradient(180deg, var(--card), #181d31);
-  border: 1px solid var(--card-edge); border-radius: 10px;
+  background: linear-gradient(180deg, var(--card), #171c2f);
+  border: 1px solid var(--card-edge); border-radius: 9px;
   padding: 13px 18px 14px; z-index: 2;
+  /* structure is etched into the plane, not floating above it: an inset
+     top highlight + bottom shade seats each tier into the substrate, the
+     opposite of the comment layer's drop-shadowed float. */
+  box-shadow: inset 0 1px 0 rgba(233,229,216,.05),
+              inset 0 -1px 0 rgba(0,0,0,.28);
 }
 .tier h3 { font-family: "Fraunces", serif; font-weight: 430; font-size: 17.5px; letter-spacing: .01em; }
 .tier .sub { font-family: "Spline Sans Mono", monospace; font-size: 10.5px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
@@ -88,32 +93,60 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 #tier-object    { top: 404px; }
 #tier-sense     { top: 594px; }
 /* ---------- comment slots ----------
-   Comments annotate the streams, so the accent edge always faces inward,
-   toward the stream: pin-left for a box sitting to the stream's right,
-   pin-right for one to its left (both set from live geometry in JS). The
-   accent is a neutral note colour, not tied to the pred/err streams, since a
-   single comment may speak to both. */
+   Root-text vs commentary. The tiers are the fixed structure of the model,
+   set in type and etched into the page; a comment is the stage-dependent
+   gloss — a translucent, drop-shadowed note that floats above the plane, is
+   voiced in italic serif, and arrives fresh for each stage. It carries no
+   enclosing box: a single inward rule is its whole frame, so it can never be
+   mistaken for a structural tier. That rule always faces the stream (pin-left
+   for a box to the stream's right, pin-right for one to its left, both set
+   from live geometry in JS). Its colour is neutral, tied to neither stream,
+   since a single comment may speak to both. */
 .comments { position: absolute; inset: 0; z-index: 3; pointer-events: none; }
 .comments .comment { pointer-events: auto; }
 .comment {
   position: absolute; z-index: 3;
   transform: translateY(-50%);
   max-width: 300px;
-  padding: 11px 15px 12px;
-  background: linear-gradient(180deg, rgba(28,33,54,.82), rgba(24,29,49,.82));
-  border: 1px solid var(--card-edge);
-  border-radius: 9px;
-  backdrop-filter: blur(2px);
+  padding: 9px 16px 11px;
+  background: rgba(16,19,31,.5);
+  border-radius: 3px;
+  box-shadow: 0 10px 26px rgba(0,0,0,.42);
+  backdrop-filter: blur(3px);
 }
-.comment.pin-left  { border-left:  2px solid var(--comment-accent); }
-.comment.pin-right { border-right: 2px solid var(--comment-accent); }
+/* the inward rule is the only edge; the note sits flush against it (square
+   corners on that side) and stays soft on the outer side. */
+.comment.pin-left  {
+  border-left: 2.5px solid var(--comment-accent);
+  border-top-left-radius: 0; border-bottom-left-radius: 0;
+}
+.comment.pin-right {
+  border-right: 2.5px solid var(--comment-accent);
+  border-top-right-radius: 0; border-bottom-right-radius: 0;
+}
 .comment .comment-tag {
   font-family: "Spline Sans Mono", monospace;
   font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
-  margin-bottom: 5px;
+  margin-bottom: 6px;
   color: var(--comment-accent);
 }
-.comment p { font-size: 13px; line-height: 1.46; color: var(--vellum); }
+/* the explaining voice — italic serif, echoing the H1's "hierarchical
+   inference"; set apart from the tiers' roman-serif titles. */
+.comment p {
+  font-family: "Fraunces", serif;
+  font-style: italic; font-weight: 340;
+  font-size: 14.5px; line-height: 1.5; color: var(--vellum);
+}
+
+/* Comments are rebuilt on every stage change, so this entrance replays each
+   time: the commentary settles in anew while the structure stays put. */
+@media (prefers-reduced-motion: no-preference) {
+  .comment { animation: commentIn .42s cubic-bezier(.2,.7,.2,1) both; }
+  @keyframes commentIn {
+    from { opacity: 0; transform: translateY(calc(-50% + 5px)); filter: blur(2px); }
+    to   { opacity: 1; transform: translateY(-50%);             filter: blur(0);   }
+  }
+}
 
 .stream-label {
   position: absolute; bottom: 6px; left: 0; right: 0; text-align: center;
