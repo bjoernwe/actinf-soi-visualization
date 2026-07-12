@@ -34,13 +34,17 @@
         g2: { down: 'med', up: 'low'  },
       },
       intake: { in: 'med', out: 'med' }, jit: 1.5, spd: 1,
-      // Per-stage annotations. Each entry anchors to a region + side:
-      //   gap:  'g0' | 'g1' | 'g2' | 'intake'
-      //   side: 'right' (err / sensory-inflow side) | 'left' (pred / action side)
+      // Per-stage annotations. An entry anchors one of two ways:
+      //   gap-anchored  — a gloss on a loop, floating beside a stream:
+      //     gap:  'g0' | 'g1' | 'g2' | 'intake'
+      //     side: 'right' (err / sensory-inflow side) | 'left' (pred / action side)
+      //   tier-anchored — a terse readout docked onto a layer's right, over its
+      //     text (which returns in stages without the note):
+      //     tier: 'self-high' | 'self-low' | 'object' | 'sense'
       // Add, drop, or move entries freely — count and placement can differ per stage.
       comments: [
-        { gap: 'g0', side: 'right', tag: 'Deeper Self Auto-Pilot', body: 'During every-day baseline, deeper self structures are semi-relaxed, slightly re-confirming and rarely updating.' },
-        { gap: 'g1', side: 'right', tag: 'High Object-Related Selfing', body: 'The tightest inference loop happens between self layer and everyday objects.' },
+        { gap: 'g0', tag: 'Deeper Self Auto-Pilot', body: 'During every-day baseline, deeper self structures are semi-relaxed, slightly re-confirming and rarely updating.' },
+        { gap: 'g1', side: 'left', tag: '💡 High Object-Related Selfing', body: 'The tightest inference loop happens between self layer and everyday objects.' },
         { gap: 'g2', side: 'right', tag: 'Details Predicted Away', body: 'Most sensory details are predicted away.' },
         { gap: 'intake', side: 'left', tag: 'Outward Actions', body: 'Actions are modeled as active inference on the outside.' },
       ],
@@ -57,10 +61,11 @@
       },
       intake: { in: 'med', out: 'low' }, jit: 1.3, spd: 1,
       comments: [
-        { gap: 'g1', side: 'left', tag: '💡 Cultivated Equanimity', body: 'Preferences are relaxed around how objects *should* be.' },
+        { gap: 'g1', side: 'left', tag: '🧘 Cultivated Equanimity', body: 'Relaxing preferences around how objects *should* be.' },
+        { tier: 'object', body: '💡 Objects start to become more interesting.' },
         { gap: 'g2', side: 'left', tag: 'Perceived Details (2)', body: 'Object layer adjusts to predict sensory input in more detail.' },
-        { gap: 'g2', side: 'right', tag: '💡 Perceived Details (1)', body: 'Attention (i.e., increased precision) leads to more prediction errors.' },
-        { gap: 'intake', side: 'left', tag: '💡 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
+        { gap: 'g2', side: 'right', tag: '🧘 Perceived Details (1)', body: 'Attention (i.e., increased precision) leads to more prediction errors.' },
+        { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
       ],
     },
   ];
@@ -148,6 +153,12 @@
   const ctx = canvas.getContext('2d');
   const diagram = el('diagram');
   const tiers = [el('tier-self-high'), el('tier-self-low'), el('tier-object'), el('tier-sense')];
+  const TIER_INDEX = { 'self-high': 0, 'self-low': 1, 'object': 2, 'sense': 3 };
+  /* a docked tier comment covers the right slice of its layer box; the label
+     survives on the left up to this fraction of the tier width. DOCK_PAD is the
+     breathing room the card leaves inside the layer's edges. */
+  const DOCK_START = 0.45;
+  const DOCK_PAD = 9;
   let W = 0, H = 0, dpr = 1;
 
   function resize() {
@@ -176,15 +187,31 @@
     return (tierBox(tiers[i]).bot + tierBox(tiers[i + 1]).top) / 2;
   }
 
-  // Pin a comment beside its stream. The accent edge always faces inward, toward
-  // the stream: a box on the right side gets pin-left, one on the left gets
-  // pin-right. Clear the widest a high-intensity band can reach so a broad stream
-  // never overlaps it. All tiers share one horizontal box, so tiers[0] suffices.
-  function placeComment(box, gap, side) {
+  // Position a comment. Two modes:
+  //   tier-anchored — dock onto the right slice of a layer box, over its text,
+  //     full box height; the inward rule (pin-left) divides label from note.
+  //   gap-anchored  — pin beside a stream. The accent edge always faces inward,
+  //     toward the stream: a box on the right gets pin-left, one on the left
+  //     pin-right. Clear the widest a high-intensity band can reach so a broad
+  //     stream never overlaps it. All tiers share one horizontal box, so
+  //     tiers[0] suffices.
+  function placeComment(box, def) {
+    box.classList.remove('pin-left', 'pin-right');
+    if (def.tier != null) {
+      const t = tierBox(tiers[TIER_INDEX[def.tier]]);
+      const left = t.left + (t.right - t.left) * DOCK_START + DOCK_PAD;
+      box.style.left = left + 'px';
+      box.style.width = (t.right - DOCK_PAD - left) + 'px';
+      // Size to content, then centre in the layer so the inset reads on every
+      // side. Width is set first so offsetHeight reflects the wrapped body.
+      box.style.height = '';
+      box.style.top = ((t.top + t.bot) / 2 - box.offsetHeight / 2) + 'px';
+      return;
+    }
+    const { gap, side } = def;
     const t = tierBox(tiers[0]);
     const cx = (t.left + t.right) / 2, w = t.right - t.left;
     box.style.top = regionCenterY(gap) + 'px';
-    box.classList.remove('pin-left', 'pin-right');
     if (side === 'left') {
       const right = cx - w * STREAM_OFF - MAX_BREADTH - 20;
       box.classList.add('pin-right'); // box left of stream: accent faces right, inward
@@ -200,7 +227,7 @@
 
   // Re-position the current stage's comment boxes (on stage change + resize).
   function layoutComments() {
-    for (const { def, box } of activeComments) placeComment(box, def.gap, def.side);
+    for (const { def, box } of activeComments) placeComment(box, def);
   }
 
   // Inline emphasis for comment bodies: *word* -> a stressed span. The body is
@@ -230,13 +257,17 @@
     commentLayer.innerHTML = '';
     activeComments = (stage.comments || []).map(def => {
       const box = document.createElement('aside');
-      box.className = 'comment';
-      const tag = document.createElement('div');
-      tag.className = 'comment-tag';
-      tag.textContent = def.tag;
+      box.className = def.tier != null ? 'comment dock' : 'comment';
+      // Gap comments carry a tag; a dock gives its whole box to the body.
+      if (def.tier == null) {
+        const tag = document.createElement('div');
+        tag.className = 'comment-tag';
+        tag.textContent = def.tag;
+        box.appendChild(tag);
+      }
       const p = document.createElement('p');
       fillBody(p, def.body);
-      box.append(tag, p);
+      box.appendChild(p);
       commentLayer.appendChild(box);
       return { def, box };
     });
@@ -244,6 +275,9 @@
   }
 
   resize();
+  // Docks are centred from their measured height, so re-place them once the
+  // web font swaps in and line-wrapping (hence height) may have changed.
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(layoutComments);
 
   function geom() {
     const dRect = diagram.getBoundingClientRect();
