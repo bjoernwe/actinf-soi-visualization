@@ -57,7 +57,7 @@
       },
       intake: { in: 'med', out: 'low' }, jit: 1.3, spd: 1,
       comments: [
-        { gap: 'g1', side: 'left', tag: 'Sitting With Change', body: 'Preferences are relaxed around how objects *should* be.' },
+        { gap: 'g1', side: 'left', tag: '💡 Cultivated Equanimity', body: 'Preferences are relaxed around how objects *should* be.' },
         { gap: 'g2', side: 'left', tag: 'Perceived Details (2)', body: 'Object layer adjusts to predict sensory input in more detail.' },
         { gap: 'g2', side: 'right', tag: '💡 Perceived Details (1)', body: 'Attention (i.e., increased precision) leads to more prediction errors.' },
         { gap: 'intake', side: 'left', tag: '💡 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
