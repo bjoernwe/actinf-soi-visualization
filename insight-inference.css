@@ -1,0 +1,103 @@
+:root {
+  --ink: #10131f;
+  --card: #1c2136;
+  --card-edge: #2b3252;
+  --vellum: #e9e5d8;
+  --muted: #7b8099;
+  --pred: #8b9ee8;   /* predictions, descending */
+  --err: #e88c4a;    /* prediction error, ascending */
+  --maxw: 1240px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--ink);
+  background-image: radial-gradient(1200px 600px at 70% -10%, #1b2140 0%, transparent 60%),
+                    radial-gradient(900px 500px at 10% 110%, #191430 0%, transparent 55%);
+  color: var(--vellum);
+  font-family: "Spline Sans", system-ui, sans-serif;
+  font-weight: 340;
+  line-height: 1.55;
+  min-height: 100vh;
+}
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
+
+/* ---------- header ---------- */
+header { padding: 56px 0 34px; border-bottom: 1px solid #262c47; }
+.eyebrow {
+  font-family: "Spline Sans Mono", monospace;
+  font-size: 12px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 18px;
+}
+.eyebrow b { color: var(--err); font-weight: 500; }
+h1 {
+  font-family: "Fraunces", serif;
+  font-weight: 380; font-size: clamp(30px, 4.6vw, 52px);
+  line-height: 1.08; letter-spacing: -0.01em; max-width: 21ch;
+}
+h1 em { font-style: italic; color: var(--pred); }
+
+/* ---------- layout ---------- */
+main { display: grid; grid-template-columns: 205px minmax(380px, 1fr); gap: 40px; padding: 40px 0 60px; align-items: start; }
+
+/* ---------- timeline rail ---------- */
+nav.rail { position: sticky; top: 24px; }
+.rail-title { font-family: "Spline Sans Mono", monospace; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); margin-bottom: 14px; }
+.rail ol { list-style: none; position: relative; }
+.rail ol::before { content: ""; position: absolute; left: 6px; top: 10px; bottom: 10px; width: 1px; background: #2c3352; }
+.rail li { position: relative; padding: 7px 0 7px 26px; }
+.rail button.stage-link {
+  background: none; border: 0; color: var(--muted); cursor: pointer; text-align: left;
+  font-family: inherit; font-size: 14.5px; font-weight: 340; padding: 2px 0; line-height: 1.3;
+  transition: color .25s;
+}
+.rail li::before {
+  content: ""; position: absolute; left: 2px; top: 15px; width: 9px; height: 9px; border-radius: 50%;
+  background: var(--ink); border: 1.5px solid #3a4165; transition: all .3s;
+}
+.rail li.active::before { background: var(--err); border-color: var(--err); box-shadow: 0 0 10px rgba(232,140,74,.55); }
+.rail li.active button.stage-link { color: var(--vellum); }
+.rail button.stage-link:hover { color: var(--vellum); }
+.rail button.stage-link:focus-visible { outline: 2px solid var(--pred); outline-offset: 3px; border-radius: 3px; }
+
+/* ---------- diagram ---------- */
+.diagram { position: relative; height: 820px; border-radius: 14px; }
+canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
+.tier {
+  position: absolute; left: 12%; width: 76%;
+  background: linear-gradient(180deg, var(--card), #181d31);
+  border: 1px solid var(--card-edge); border-radius: 10px;
+  padding: 13px 18px 14px; z-index: 2;
+}
+.tier h3 { font-family: "Fraunces", serif; font-weight: 430; font-size: 17.5px; letter-spacing: .01em; }
+.tier .sub { font-family: "Spline Sans Mono", monospace; font-size: 10.5px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 2px; }
+#tier-self-high { top: 24px; }
+#tier-self-low  { top: 214px; }
+#tier-object    { top: 404px; }
+#tier-sense     { top: 594px; }
+.stream-label {
+  position: absolute; bottom: 6px; left: 0; right: 0; text-align: center;
+  font-family: "Spline Sans Mono", monospace; font-size: 10.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: #565c78; z-index: 2;
+}
+.axis {
+  position: absolute; left: 2%; top: 30px; bottom: 90px; width: 1px; z-index: 1;
+  background: linear-gradient(180deg, #3a4165, #262c47);
+}
+.axis::before, .axis::after {
+  position: absolute; left: -4px; font-family: "Spline Sans Mono", monospace; font-size: 9.5px;
+  letter-spacing: .1em; text-transform: uppercase; color: #565c78; writing-mode: vertical-rl;
+}
+.axis::before { content: "slow · invariant"; top: 0; transform: translateX(-8px); }
+.axis::after  { content: "fast · concrete";  bottom: 0; transform: translateX(-8px); }
+
+@media (max-width: 1060px) {
+  main { grid-template-columns: 1fr; gap: 26px; }
+  nav.rail { position: static; }
+  .rail ol { display: flex; flex-wrap: wrap; gap: 2px 18px; }
+  .rail ol::before { display: none; }
+  .rail li { padding-left: 18px; }
+  .rail li::before { top: 12px; }
+  .diagram { height: 760px; }
+  .axis { display: none; }
+  .tier { left: 6%; width: 88%; }
+}
