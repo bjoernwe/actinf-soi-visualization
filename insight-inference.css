@@ -6,6 +6,7 @@
   --muted: #7b8099;
   --pred: #8b9ee8;   /* predictions, descending */
   --err: #e88c4a;    /* prediction error, ascending */
+  --comment-accent: #c7c3b6;   /* neutral note edge, tied to neither stream */
   --maxw: 1240px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -74,7 +75,12 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 #tier-self-low  { top: 214px; }
 #tier-object    { top: 404px; }
 #tier-sense     { top: 594px; }
-/* ---------- comment slots ---------- */
+/* ---------- comment slots ----------
+   Comments annotate the streams, so the accent edge always faces inward,
+   toward the stream: pin-left for a box sitting to the stream's right,
+   pin-right for one to its left (both set from live geometry in JS). The
+   accent is a neutral note colour, not tied to the pred/err streams, since a
+   single comment may speak to both. */
 .comment {
   position: absolute; z-index: 3;
   transform: translateY(-50%);
@@ -82,19 +88,17 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
   padding: 11px 15px 12px;
   background: linear-gradient(180deg, rgba(28,33,54,.82), rgba(24,29,49,.82));
   border: 1px solid var(--card-edge);
-  border-left: 2px solid var(--card-edge);
   border-radius: 9px;
   backdrop-filter: blur(2px);
 }
-.comment.err  { border-left-color: var(--err); }
-.comment.pred { border-left-color: var(--pred); }
+.comment.pin-left  { border-left:  2px solid var(--comment-accent); }
+.comment.pin-right { border-right: 2px solid var(--comment-accent); }
 .comment .comment-tag {
   font-family: "Spline Sans Mono", monospace;
   font-size: 10px; letter-spacing: .12em; text-transform: uppercase;
   margin-bottom: 5px;
+  color: var(--comment-accent);
 }
-.comment.err  .comment-tag { color: var(--err); }
-.comment.pred .comment-tag { color: var(--pred); }
 .comment p { font-size: 13px; line-height: 1.46; color: var(--vellum); }
 
 .stream-label {

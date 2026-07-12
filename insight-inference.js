@@ -122,6 +122,7 @@
       const cx = (b.left + b.right) / 2, w = b.right - b.left;
       const left = cx + w * STREAM_OFF + MAX_BREADTH + 20;
       const box = el(id);
+      box.classList.add('pin-left'); // box sits right of the stream: accent faces left, inward
       box.style.top = ((a.bot + b.top) / 2) + 'px';
       box.style.left = left + 'px';
       box.style.width = (b.right - left) + 'px';
@@ -137,6 +138,7 @@
     const cx = (s.left + s.right) / 2, w = s.right - s.left;
     const right = cx - w * STREAM_OFF - MAX_BREADTH - 20;
     const outBox = el('comment-intake-out');
+    outBox.classList.add('pin-right'); // box sits left of the stream: accent faces right, inward
     outBox.style.top = ((s.bot + (H - 26)) / 2) + 'px';
     outBox.style.left = s.left + 'px';
     outBox.style.width = (right - s.left) + 'px';
