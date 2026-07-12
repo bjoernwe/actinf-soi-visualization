@@ -41,10 +41,13 @@
       //   tier-anchored — a terse readout docked onto a layer's right, over its
       //     text (which returns in stages without the note):
       //     tier: 'self-high' | 'self-low' | 'object' | 'sense'
+      //     icon: optional emoji, rendered upright in its own column beside
+      //       the (italic) body so it never inherits the slant and multi-line
+      //       bodies stay flush past it, not indented under the glyph.
       // Add, drop, or move entries freely — count and placement can differ per stage.
       comments: [
         { gap: 'g0', tag: 'Deeper Self Auto-Pilot', body: 'During every-day baseline, deeper self structures are semi-relaxed, slightly re-confirming and rarely updating.' },
-        { gap: 'g1', side: 'left', tag: '💡 High Object-Related Selfing', body: 'The tightest inference loop happens between self layer and everyday objects.' },
+        { gap: 'g1', side: 'left', tag: '🖐️️ High Object-Related Selfing', body: 'The tightest inference loop happens between self layer and everyday objects.' },
         { gap: 'g2', side: 'right', tag: 'Details Predicted Away', body: 'Most sensory details are predicted away.' },
         { gap: 'intake', side: 'left', tag: 'Outward Actions', body: 'Actions are modeled as active inference on the outside.' },
       ],
@@ -62,9 +65,10 @@
       intake: { in: 'med', out: 'low' }, jit: 1.3, spd: 1,
       comments: [
         { gap: 'g1', side: 'left', tag: '🧘 Cultivated Equanimity', body: 'Relaxing preferences around how objects *should* be.' },
-        { tier: 'object', body: '💡 Objects start to become more interesting.' },
+        { tier: 'object', icon: '💡', body: 'Objects start to become more fluid and interesting.' },
         { gap: 'g2', side: 'left', tag: 'Perceived Details (2)', body: 'Object layer adjusts to predict sensory input in more detail.' },
-        { gap: 'g2', side: 'right', tag: '🧘 Perceived Details (1)', body: 'Attention (i.e., increased precision) leads to more prediction errors.' },
+        { gap: 'g2', side: 'right', tag: 'Perceived Details (1)', body: 'Increased prediction error due to attention.' },
+        { tier: 'sense', icon: '🧘', body: 'Attention (i.e., increased precision) is placed on the sensory input.' },
         { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation',  body: 'Sitting still minimizes active inference (i.e., action) on the environment.' },
       ],
     },
@@ -264,6 +268,14 @@
         tag.className = 'comment-tag';
         tag.textContent = def.tag;
         box.appendChild(tag);
+      }
+      // A dock's icon gets its own upright column beside the (italic) body,
+      // so it never inherits the slant and multi-line text stays flush past it.
+      if (def.icon) {
+        const icon = document.createElement('span');
+        icon.className = 'comment-icon';
+        icon.textContent = def.icon;
+        box.appendChild(icon);
       }
       const p = document.createElement('p');
       fillBody(p, def.body);

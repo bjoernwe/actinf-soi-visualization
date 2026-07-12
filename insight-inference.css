@@ -146,10 +146,23 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 .comment.dock {
   transform: none;
   max-width: none;
-  padding: 14px 18px;
+  padding: 14px 13px;
   border-radius: 9px;   /* match the tier's corners */
   border: 1px solid color-mix(in srgb, var(--comment-accent) 30%, transparent);
   background: rgba(16,19,31,.72);
+  /* icon column + body; flex-start keeps the icon on the first line, and the
+     matched line-height (below) seats it there rather than a hair high. */
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+}
+/* the lifted emoji: upright (never inherits the body's italic slant) and
+   line-height-matched to the body so it aligns with the first line of text. */
+.comment.dock .comment-icon {
+  flex: none;
+  font-style: normal;
+  font-size: 15px;
+  line-height: 1.5;
 }
 .comment .comment-tag {
   font-family: "Spline Sans Mono", monospace;
