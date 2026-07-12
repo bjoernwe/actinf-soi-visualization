@@ -78,7 +78,7 @@
       },
       intake: { in: 'med', out: 'low' }, jit: 2, spd: 1.35,
       comments: [
-        { tier: 'self-low', icon: '🧘', body: 'Self is still stable enough to not escalate upwards. Instead, it grasps for the pleasant objects.' },
+        { tier: 'self-low', icon: '🧘', body: 'Self is still stable enough to not escalate upwards. Instead, it grasps for the pleasant (but unstable) objects.' },
         { gap: 'g1', side: 'right', tag: 'Upwards Error Propagation', body: 'Since objects are fluid now, update pressure on self increases.' },
         { tier: 'object', icon: '💡', body: 'Unlike every-day objects, these now are extremely fluid and rich in detail' },
         { gap: 'g2', side: 'left', tag: 'Adjusted Object Predictions', body: 'Since object layer is still constraint by self-preferences, it grabs a local minima - which is *pleasant*.' },
@@ -124,6 +124,10 @@
   const nextBtn = document.getElementById('next-stage');
   prevBtn.addEventListener('click', () => setStage(cur - 1));
   nextBtn.addEventListener('click', () => setStage(cur + 1));
+  window.addEventListener('keydown', e => {
+    if (e.key === 'ArrowLeft') setStage(cur - 1);
+    else if (e.key === 'ArrowRight') setStage(cur + 1);
+  });
 
   const el = id => document.getElementById(id);
 
