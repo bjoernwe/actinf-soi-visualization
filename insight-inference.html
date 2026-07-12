@@ -22,6 +22,10 @@
     <nav class="rail" aria-label="Stages">
       <div class="rail-title">The path</div>
       <ol id="rail"></ol>
+      <div class="rail-nav">
+        <button type="button" id="prev-stage" class="rail-nav-btn">&larr; Back</button>
+        <button type="button" id="next-stage" class="rail-nav-btn">Next &rarr;</button>
+      </div>
     </nav>
 
     <!-- diagram -->
@@ -46,24 +50,10 @@
       </div>
       <div class="stream-label">the incoming stream</div>
 
-      <!-- comment slots: sit in the free space beside the (now centered) streams.
-           Positioned from live geometry in JS (layoutComments). -->
-      <aside class="comment" id="comment-high-err">
-        <div class="comment-tag">Deeper Self Auto-Pilot</div>
-        <p>During every-day baseline, deeper self structures are semi-relaxed, slightly re-confirming and rarely updating.</p>
-      </aside>
-      <aside class="comment" id="comment-mid-err">
-        <div class="comment-tag">High Object-Related Selfing</div>
-        <p>The tightest inference loop happens between self layer and everyday objects.</p>
-      </aside>
-      <aside class="comment" id="comment-low-err">
-        <div class="comment-tag">Details Predicted Away</div>
-        <p>Most sensory details are predicted away.</p>
-      </aside>
-      <aside class="comment" id="comment-intake-out">
-        <div class="comment-tag">Sitting Still</div>
-        <p>Active inference (action) on the environment is minimal.</p>
-      </aside>
+      <!-- comment layer: boxes are generated per stage from STAGES[i].comments,
+           each anchored to a region + side and positioned from live geometry
+           (renderComments / layoutComments). -->
+      <div class="comments" id="comments"></div>
     </div>
   </main>
 </div>

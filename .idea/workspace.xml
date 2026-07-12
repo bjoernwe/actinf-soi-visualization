@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="b338261d-d85b-41ae-a054-5d282ac65288" name="Changes" comment="Update input stream">
-      <change beforePath="$PROJECT_DIR$/insight-inference.html" beforeDir="false" afterPath="$PROJECT_DIR$/insight-inference.html" afterDir="false" />
+    <list default="true" id="b338261d-d85b-41ae-a054-5d282ac65288" name="Changes" comment="Allow comments on layer">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/insight-inference.js" beforeDir="false" afterPath="$PROJECT_DIR$/insight-inference.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +83,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
     "copilot.chat.legacySessionMetadata.migrated": "true",
-    "git-widget-placeholder": "baseline",
+    "git-widget-placeholder": "access",
     "ignore_missing_gitignore": "true",
     "kotlin-language-version-configured": "true",
     "node.js.detected.package.eslint": "true",
@@ -140,7 +141,55 @@
       <option name="project" value="LOCAL" />
       <updated>1783863090872</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Fix vertical axis">
+      <option name="closed" value="true" />
+      <created>1783866413010</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1783866413010</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Add comments">
+      <option name="closed" value="true" />
+      <created>1783866640683</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1783866640683</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Change comment style">
+      <option name="closed" value="true" />
+      <created>1783867031791</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1783867031791</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Add inline formatter">
+      <option name="closed" value="true" />
+      <created>1783867145334</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1783867145334</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Update comments">
+      <option name="closed" value="true" />
+      <created>1783867315602</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1783867315602</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Allow comments on layer">
+      <option name="closed" value="true" />
+      <created>1783871005207</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1783871005207</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -149,8 +198,13 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Initial file import" />
     <MESSAGE value="Split code" />
-    <MESSAGE value="Add comments" />
     <MESSAGE value="Update input stream" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update input stream" />
+    <MESSAGE value="Fix vertical axis" />
+    <MESSAGE value="Add comments" />
+    <MESSAGE value="Change comment style" />
+    <MESSAGE value="Add inline formatter" />
+    <MESSAGE value="Update comments" />
+    <MESSAGE value="Allow comments on layer" />
+    <option name="LAST_COMMIT_MESSAGE" value="Allow comments on layer" />
   </component>
 </project>
