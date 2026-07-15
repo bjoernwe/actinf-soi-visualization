@@ -42,7 +42,7 @@ Deep background on the per-stage claims (what each stage asserts in S/O terms, w
 
 **Comment layer** is separate from the canvas. `renderComments()` rebuilds the boxes on each stage change (so count/text/placement can differ per stage); `placeComment()` pins each box beside its anchor `{ gap, side }` using live geometry, clearing the widest a high-intensity band can reach so streams never overlap text. The accent edge always faces *inward* toward the stream (`pin-left`/`pin-right`). `layoutComments()` re-runs on resize.
 
-**TypeScript note:** `tsconfig.json` currently has `strict: false`. The authored model (`model.ts`, `stages.ts`) and everything that consumes it in `main.ts` (rail/nav/comment placement) already type-checks under strict rules; the canvas/particle internals (`geom()`, `spawn()`, `frame()`) are still loosely typed and are the reason strict mode isn't flipped on yet. Tighten incrementally as those get typed — don't flip it on wholesale and paper over the gap with `any`.
+**TypeScript note:** `tsconfig.json` has `strict: true`. `Gap`/`Tier` (in `stages.ts`) are plain `string`, not literal unions — a diagram's actual tiers/gaps come from a `DiagramConfig` (`diagram.ts`) at runtime, not a fixed compile-time shape. `validateStage()` recovers that safety at dev time instead: it checks a stage's gap/tier references against the `DiagramConfig` it's paired with and throws a stage-named error on a typo. Call it under `import.meta.env.DEV` from a page's bootstrap (see `main.ts`), same as `STAGES.forEach(s => validateStage(MAIN_DIAGRAM, s))`.
 
 ## Working conventions
 
