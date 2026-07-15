@@ -1,8 +1,12 @@
 import { INTENSITY, MAX_BREADTH, COLORS, type IntensityValues } from './model';
-import { STAGES, type Stage, type Comment, type Gap, type Dir, type Tier } from './stages';
+import { type Stage, type Comment, type Gap, type Dir, type Tier, validateStage } from './stages';
+import { gapIds } from './diagram';
+import { MAIN_DIAGRAM, STAGES } from './content/insight-inference';
 
 (() => {
-  const GAPS: Gap[] = ['g0', 'g1', 'g2'];
+  if (import.meta.env.DEV) STAGES.forEach(s => validateStage(MAIN_DIAGRAM, s));
+
+  const GAPS: Gap[] = gapIds(MAIN_DIAGRAM);
   const DIRS: Dir[] = ['down', 'up'];
   const FIELDS: (keyof IntensityValues)[] = ['breadth', 'rate', 'alpha', 'size'];
 
@@ -95,8 +99,8 @@ import { STAGES, type Stage, type Comment, type Gap, type Dir, type Tier } from 
   const canvas = el('flow') as HTMLCanvasElement;
   const ctx = canvas.getContext('2d')!;
   const diagram = el('diagram');
-  const tiers = [el('tier-self-high'), el('tier-self-low'), el('tier-object'), el('tier-sense')];
-  const TIER_INDEX: Record<Tier, number> = { 'self-high': 0, 'self-low': 1, 'object': 2, 'sense': 3 };
+  const tiers = MAIN_DIAGRAM.layers.map(l => el('tier-' + l.id));
+  const TIER_INDEX: Record<Tier, number> = Object.fromEntries(MAIN_DIAGRAM.layers.map((l, i) => [l.id, i]));
   /* a docked tier comment covers the right slice of its layer box; the label
      survives on the left up to this fraction of the tier width. DOCK_PAD is the
      breathing room the card leaves inside the layer's edges. */
@@ -251,7 +255,8 @@ import { STAGES, type Stage, type Comment, type Gap, type Dir, type Tier } from 
   }
 
   const parts = [];
-  const acc = { g0down: 0, g0up: 0, g1down: 0, g1up: 0, g2down: 0, g2up: 0, intake_in: 0, intake_out: 0 };
+  const acc: Record<string, number> = { intake_in: 0, intake_out: 0 };
+  for (const g of GAPS) for (const d of DIRS) acc[g + d] = 0;
 
   // Gap-stream bubble. `ox` is a center-weighted offset in [-1, 1]; the render
   // loop scales it by the stream's live breadth, so the whole band widens or
