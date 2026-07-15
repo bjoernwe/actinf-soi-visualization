@@ -160,13 +160,13 @@
     rail.appendChild(li);
   });
   rail.addEventListener('click', e => {
-    const b = e.target.closest('button.stage-link');
-    if (b) setStage(+b.dataset.i);
+    const b = (e.target as Element).closest('button.stage-link') as HTMLButtonElement | null;
+    if (b) setStage(+b.dataset.i!);
   });
 
   /* prev / next navigation */
-  const prevBtn = document.getElementById('prev-stage');
-  const nextBtn = document.getElementById('next-stage');
+  const prevBtn = document.getElementById('prev-stage') as HTMLButtonElement;
+  const nextBtn = document.getElementById('next-stage') as HTMLButtonElement;
   prevBtn.addEventListener('click', () => setStage(cur - 1));
   nextBtn.addEventListener('click', () => setStage(cur + 1));
   window.addEventListener('keydown', e => {
@@ -215,8 +215,8 @@
   });
 
   /* ---------------- canvas ---------------- */
-  const canvas = el('flow');
-  const ctx = canvas.getContext('2d');
+  const canvas = el('flow') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d')!;
   const diagram = el('diagram');
   const tiers = [el('tier-self-high'), el('tier-self-low'), el('tier-object'), el('tier-sense')];
   const TIER_INDEX = { 'self-high': 0, 'self-low': 1, 'object': 2, 'sense': 3 };
