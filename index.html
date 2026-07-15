@@ -32,21 +32,27 @@
     <div class="diagram" id="diagram">
       <canvas id="flow"></canvas>
       <div class="axis" aria-hidden="true"></div>
-      <div class="tier" id="tier-self-high">
-        <h3>Self layer (deep)</h3>
-        <div class="sub">deep preferences and conditioning · deeper perceptual structures like space and time</div>
-      </div>
-      <div class="tier" id="tier-self-low">
-        <h3>Self layer (every-day)</h3>
-        <div class="sub">reactions · will · object relations</div>
-      </div>
-      <div class="tier" id="tier-object">
-        <h3>Object layer</h3>
-        <div class="sub">common things &amp; scenes to act on &amp; relate to</div>
-      </div>
-      <div class="tier" id="tier-sense">
-        <h3>Sensory layer</h3>
-        <div class="sub">sensory details · texture · vibration</div>
+      <!-- tiers flow in a normal-flow column (gap + padding set in CSS); the
+           canvas, axis, comment layer, and stream-label are absolute overlays
+           on top. .diagram has no fixed height -- it sizes to this stack, so
+           resizing a tier reflows everything below it instead of breaking. -->
+      <div class="tier-stack">
+        <div class="tier" id="tier-self-high">
+          <h3>Self layer (deep)</h3>
+          <div class="sub">deep preferences and conditioning · deeper perceptual structures like space and time</div>
+        </div>
+        <div class="tier" id="tier-self-low">
+          <h3>Self layer (every-day)</h3>
+          <div class="sub">reactions · will · object relations</div>
+        </div>
+        <div class="tier" id="tier-object">
+          <h3>Object layer</h3>
+          <div class="sub">common things &amp; scenes to act on &amp; relate to</div>
+        </div>
+        <div class="tier" id="tier-sense">
+          <h3>Sensory layer</h3>
+          <div class="sub">sensory details · texture · vibration</div>
+        </div>
       </div>
       <div class="stream-label">the incoming stream</div>
 
