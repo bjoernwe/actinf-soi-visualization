@@ -20,47 +20,12 @@
   <main>
     <!-- rail -->
     <nav class="rail" aria-label="Stages">
-      <div class="rail-title">The path</div>
-      <ol id="rail"></ol>
-      <div class="rail-nav">
-        <button type="button" id="prev-stage" class="rail-nav-btn">&larr; Back</button>
-        <button type="button" id="next-stage" class="rail-nav-btn">Next &rarr;</button>
-      </div>
+      <stage-rail></stage-rail>
     </nav>
 
-    <!-- diagram -->
-    <div class="diagram" id="diagram">
-      <canvas id="flow"></canvas>
-      <div class="axis" aria-hidden="true"></div>
-      <!-- tiers flow in a normal-flow column (gap + padding set in CSS); the
-           canvas, axis, comment layer, and stream-label are absolute overlays
-           on top. .diagram has no fixed height -- it sizes to this stack, so
-           resizing a tier reflows everything below it instead of breaking. -->
-      <div class="tier-stack">
-        <div class="tier" id="tier-self-high">
-          <h3>Self layer (deep)</h3>
-          <div class="sub">deep preferences and conditioning · deeper perceptual structures like space and time</div>
-        </div>
-        <div class="tier" id="tier-self-low">
-          <h3>Self layer (every-day)</h3>
-          <div class="sub">reactions · will · object relations</div>
-        </div>
-        <div class="tier" id="tier-object">
-          <h3>Object layer</h3>
-          <div class="sub">common things &amp; scenes to act on &amp; relate to</div>
-        </div>
-        <div class="tier" id="tier-sense">
-          <h3>Sensory layer</h3>
-          <div class="sub">sensory details · texture · vibration</div>
-        </div>
-      </div>
-      <div class="stream-label">the incoming stream</div>
-
-      <!-- comment layer: boxes are generated per stage from STAGES[i].comments,
-           each anchored to a region + side and positioned from live geometry
-           (renderComments / layoutComments). -->
-      <div class="comments" id="comments"></div>
-    </div>
+    <!-- diagram: tiers, canvas, comments, all driven by MAIN_DIAGRAM + the
+         active Stage (see src/main.ts and src/content/insight-inference.ts) -->
+    <flow-diagram class="diagram"></flow-diagram>
   </main>
 </div>
 

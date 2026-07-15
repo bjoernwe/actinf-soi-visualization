@@ -1,5 +1,6 @@
 import { MAX_BREADTH } from './model';
 import type { Comment } from './stages';
+import type { CommentNote } from './components/comment-note';
 
 /* how far the pred/err streams sit from a gap's center, as a fraction of tier
    width. Smaller = streams hug the center, leaving side room for comment slots. */
@@ -11,25 +12,6 @@ const DOCK_START = 0.45;
 const DOCK_PAD = 9;
 
 interface Box { top: number; bot: number; left: number; right: number; }
-
-// Inline emphasis for comment bodies: *word* -> a stressed span. The body is
-// set in italic serif, so .stress reads by standing upright (see CSS), the
-// inverse of markdown's usual italic. Split on '*' and alternate plain text /
-// emphasis (odd fragments are inside a pair); each fragment is written as a
-// text node, so an authored string can never inject markup.
-function fillBody(p: HTMLParagraphElement, text: string): void {
-  text.split('*').forEach((frag, i) => {
-    if (!frag) return;
-    if (i % 2) {
-      const em = document.createElement('em');
-      em.className = 'stress';
-      em.textContent = frag;
-      p.appendChild(em);
-    } else {
-      p.appendChild(document.createTextNode(frag));
-    }
-  });
-}
 
 /* Builds and positions a stage's comment boxes inside a diagram's comment
    layer. Two anchor modes (see stages.ts's GapComment/TierComment):
@@ -104,32 +86,25 @@ export class CommentLayer {
 
   // Build and place the comment boxes for a stage. Rebuilt on each stage
   // change, so text, count, and placement can all differ from stage to stage.
+  // <comment-note> renders its own tag/icon/body declaratively (see that
+  // component); this class stays responsible for the comment/dock class
+  // (applied here, synchronously, since dock sizing below needs it present
+  // before Lit's own -- async -- first render of that element lands) and all
+  // of the positioning math.
   render(comments: Comment[]): void {
     this.container.innerHTML = '';
     this.active = comments.map(def => {
-      const box = document.createElement('aside');
+      const box = document.createElement('comment-note') as CommentNote;
       box.className = 'tier' in def ? 'comment dock' : 'comment';
-      // Gap comments carry a tag; a dock gives its whole box to the body.
-      if (!('tier' in def)) {
-        const tag = document.createElement('div');
-        tag.className = 'comment-tag';
-        tag.textContent = def.tag;
-        box.appendChild(tag);
-      }
-      // A dock's icon gets its own upright column beside the (italic) body,
-      // so it never inherits the slant and multi-line text stays flush past it.
-      if ('tier' in def && def.icon) {
-        const icon = document.createElement('span');
-        icon.className = 'comment-icon';
-        icon.textContent = def.icon;
-        box.appendChild(icon);
-      }
-      const p = document.createElement('p');
-      fillBody(p, def.body);
-      box.appendChild(p);
+      box.def = def;
       this.container.appendChild(box);
       return { def, box };
     });
     this.layout();
+    // A dock's height comes from its actual (icon + body) content, which
+    // <comment-note>'s own render hasn't painted yet on the pass above --
+    // Lit's updates are scheduled as a microtask. Re-layout once each note
+    // has actually rendered so dock sizing reads real content, not zero.
+    void Promise.all(this.active.map(({ box }) => (box as CommentNote).updateComplete)).then(() => this.layout());
   }
 }

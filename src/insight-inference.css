@@ -18,6 +18,8 @@
   --stack-pad-bottom: 160px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+/* custom elements default to display:inline until told otherwise */
+stage-rail, flow-diagram, tier-layer, comment-note { display: block; }
 body {
   background: var(--ink);
   background-image: radial-gradient(1200px 600px at 70% -10%, #1b2140 0%, transparent 60%),
