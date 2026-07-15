@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Component Library Demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Spline+Sans:wght@300..600&family=Spline+Sans+Mono:wght@300..600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/src/insight-inference.css">
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">component demo · not authored model content</div>
+    <h1>A three-layer <em>constellation</em></h1>
+  </header>
+
+  <main>
+    <!-- rail -->
+    <nav class="rail" aria-label="Stages">
+      <stage-rail></stage-rail>
+    </nav>
+
+    <!-- same <stage-rail>/<flow-diagram> components as index.html, driven by
+         a different DiagramConfig + Stage[] (see src/pages/demo.ts and
+         src/content/demo.ts) -- proves the diagram is data-driven rather
+         than hardcoded to the walkthrough's four tiers. -->
+    <flow-diagram class="diagram"></flow-diagram>
+  </main>
+</div>
+
+<script type="module" src="/src/pages/demo.ts"></script>
+</body>
+</html>
