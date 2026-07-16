@@ -6,6 +6,17 @@ import { FlowEngine } from '../engine';
 import './tier-layer';
 import './comment-note';
 
+/* What a page hands this element: the DiagramConfig it's built for (fixed for
+   the element's lifetime) plus whichever Stage is currently active. Bundled
+   into one property -- rather than two separately-set ones -- so a page's
+   bootstrap has a single, explicit assignment to point at
+   (`diagram.content = { config, stage }`) instead of the wiring being spread
+   across a generic mountPage() reaching into the DOM. */
+export interface FlowDiagramContent {
+  config: DiagramConfig;
+  stage: Stage;
+}
+
 /* Hosts one diagram: the canvas particle stream, the tier stack, and the
    comment layer, driven by a DiagramConfig (so a page composes whatever
    layer constellation it needs) and the currently active Stage. The canvas
@@ -13,8 +24,7 @@ import './comment-note';
    is to render the DOM the engine measures and hand it stage changes. */
 @customElement('flow-diagram')
 export class FlowDiagram extends LitElement {
-  @property({ attribute: false }) config!: DiagramConfig;
-  @property({ attribute: false }) stage!: Stage;
+  @property({ attribute: false }) content!: FlowDiagramContent;
 
   createRenderRoot() {
     return this;
@@ -29,7 +39,7 @@ export class FlowDiagram extends LitElement {
       <canvas id="flow"></canvas>
       <div class="axis" aria-hidden="true"></div>
       <div class="tier-stack">
-        ${this.config.layers.map(l => html`
+        ${this.content.config.layers.map(l => html`
           <tier-layer class="tier" id=${'tier-' + l.id} .layer=${l}></tier-layer>
         `)}
       </div>
@@ -42,7 +52,7 @@ export class FlowDiagram extends LitElement {
     const canvas = this.querySelector('#flow') as HTMLCanvasElement;
     const tiers = [...this.querySelectorAll('tier-layer')] as HTMLElement[];
     const commentContainer = this.querySelector('.comments') as HTMLElement;
-    this.engine = new FlowEngine(canvas, this, tiers, this.config, this.stage, commentContainer);
+    this.engine = new FlowEngine(canvas, this, tiers, this.content.config, this.content.stage, commentContainer);
     this.engine.resize();
     this.engine.start();
     window.addEventListener('resize', this.onResize);
@@ -56,7 +66,7 @@ export class FlowDiagram extends LitElement {
   // single place a stage change (including the initial one) reaches the
   // engine -- no separate call needed in firstUpdated().
   updated(changed: PropertyValues): void {
-    if (this.started && changed.has('stage')) this.engine!.setStage(this.stage);
+    if (this.started && changed.has('content')) this.engine!.setStage(this.content.stage);
   }
 
   disconnectedCallback(): void {

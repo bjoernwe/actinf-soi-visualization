@@ -1,19 +1,20 @@
 import { type Stage, validateStage } from './stages';
-import type { DiagramConfig } from './diagram';
+import type { FlowDiagram } from './components/flow-diagram';
 import './components/stage-rail';
 import './components/flow-diagram';
 
-/* Wires a page's <stage-rail> and <flow-diagram> (expected once each in the
-   document) to a DiagramConfig + its Stage timeline: hash routing, prev/next,
-   arrow keys, and validateStage() in dev. A page's bootstrap script is just
-   this call plus its own content module -- see src/pages/. */
-export function mountPage(config: DiagramConfig, stages: Stage[]): void {
+/* Wires a page's <stage-rail> to a Stage timeline, and drives stage changes
+   into a <flow-diagram> a page's bootstrap has already primed with its
+   DiagramConfig (`diagram.content = { config, stage }`, done explicitly in
+   src/pages/* rather than reached for here) -- hash routing, prev/next,
+   arrow keys, and validateStage() in dev, using the config already sitting
+   on `diagram.content`. */
+export function mountPage(diagram: FlowDiagram, stages: Stage[]): void {
+  const config = diagram.content.config;
   if (import.meta.env.DEV) stages.forEach(s => validateStage(config, s));
 
   const rail = document.querySelector('stage-rail')!;
-  const diagram = document.querySelector('flow-diagram')!;
   rail.stages = stages;
-  diagram.config = config;
 
   let cur = -1;
 
@@ -29,7 +30,7 @@ export function mountPage(config: DiagramConfig, stages: Stage[]): void {
     if (i < 0 || i >= stages.length || i === cur) return;
     cur = i;
     rail.current = i;
-    diagram.stage = stages[i];
+    diagram.content = { config, stage: stages[i] };
     location.hash = slug(stages[i]);
   }
 
