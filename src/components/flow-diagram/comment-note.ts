@@ -1,6 +1,6 @@
 import { LitElement, html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { Comment } from '../stages';
+import type { Comment } from '../../stages';
 
 /* Renders one comment's content (tag/icon/body). Positioning and the
    comment/dock class are handled by CommentLayer (comments.ts), which owns

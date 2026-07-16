@@ -1,7 +1,7 @@
 import { type Stage, validateStage } from './stages';
-import type { FlowDiagram } from './components/flow-diagram';
+import type { FlowDiagram } from './components/flow-diagram/flow-diagram';
 import './components/stage-rail';
-import './components/flow-diagram';
+import './components/flow-diagram/flow-diagram';
 
 /* Wires a page's <stage-rail> to a Stage timeline, and drives stage changes
    into a <flow-diagram> a page's bootstrap has already primed with its

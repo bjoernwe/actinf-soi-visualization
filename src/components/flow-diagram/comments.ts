@@ -1,6 +1,6 @@
-import { MAX_BREADTH } from './model';
-import type { Comment } from './stages';
-import type { CommentNote } from './components/comment-note';
+import { MAX_BREADTH } from '../../model';
+import type { Comment } from '../../stages';
+import type { CommentNote } from './comment-note';
 
 /* how far the pred/err streams sit from a gap's center, as a fraction of tier
    width. Smaller = streams hug the center, leaving side room for comment slots. */

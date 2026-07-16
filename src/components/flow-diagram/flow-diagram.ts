@@ -1,8 +1,8 @@
 import { LitElement, html, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { DiagramConfig } from '../diagram';
-import type { Stage } from '../stages';
-import { FlowEngine } from '../engine';
+import type { DiagramConfig } from '../../diagram';
+import type { Stage } from '../../stages';
+import { FlowEngine } from './engine';
 import './tier-layer';
 import './comment-note';
 

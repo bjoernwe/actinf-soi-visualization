@@ -1,6 +1,6 @@
 import { LitElement, html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { Layer } from '../diagram';
+import type { Layer } from '../../diagram';
 
 /* A single layer box. The `.tier` class and id are applied by <flow-diagram>
    directly in its own template (not here), so they're present synchronously
