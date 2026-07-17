@@ -1,17 +1,38 @@
 import { defineConfig } from 'vite';
 import { resolve } from 'node:path';
+import { viteSingleFile } from 'vite-plugin-singlefile';
+
+// Vite's dev server serves any .html file at the root by path already; this
+// map is only needed so `vite build` knows every page to bundle. Add a page
+// here (and a matching build:<name> script in package.json) when you add one
+// under src/pages/.
+const PAGES: Record<string, string> = {
+  intro: 'intro.html',
+  main: 'index.html',
+  componentDemo: 'component-demo.html',
+};
+
+// vite-plugin-singlefile inlines a build's JS/CSS into one self-contained
+// HTML file (so pages open directly via file://, no server needed) but only
+// supports a single entry point per build. `npm run build` therefore invokes
+// `vite build` once per page with PAGE set, each pass building just that
+// page's entry; with PAGE unset (dev server, or a raw `vite build`) it falls
+// back to bundling every page in the normal multi-entry way.
+const page = process.env.PAGE;
 
 export default defineConfig({
   base: './',
+  plugins: [viteSingleFile()],
   build: {
-    // Vite's dev server serves any .html file at the root by path already;
-    // this is only needed so `vite build` bundles every page instead of just
-    // index.html. Add a page here when you add one under src/pages/.
+    // Cleared once up front by the build script, not per-page here, since
+    // emptying it before every single-page pass would wipe prior pages' output.
+    emptyOutDir: false,
     rollupOptions: {
-      input: {
-        main: resolve(__dirname, 'index.html'),
-        componentDemo: resolve(__dirname, 'component-demo.html'),
-      },
+      input: page
+        ? { [page]: resolve(__dirname, PAGES[page]) }
+        : Object.fromEntries(
+            Object.entries(PAGES).map(([name, file]) => [name, resolve(__dirname, file)])
+          ),
     },
   },
 });
