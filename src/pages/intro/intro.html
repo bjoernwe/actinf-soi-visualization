@@ -11,12 +11,14 @@
 </head>
 <body>
 
-<!-- same <page-scaffold> as index.html; content (DEMO_DIAGRAM + DEMO_STAGES)
-     comes from the Page descriptor in src/content/demo.ts -- proves the
-     diagram is data-driven rather than hardcoded to the walkthrough's four
-     tiers. -->
 <div id="app"></div>
 
-<script type="module" src="/src/pages/intro.ts"></script>
+<script type="module">
+  import { html, render } from 'lit';
+  import '../../components/page-scaffold';
+  import { PAGE } from './intro';
+
+  render(html`<page-scaffold .page=${PAGE}></page-scaffold>`, document.getElementById('app'));
+</script>
 </body>
 </html>

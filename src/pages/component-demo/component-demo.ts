@@ -1,13 +1,13 @@
 import { html } from 'lit';
-import type { DiagramConfig } from '../diagram';
-import type { Stage } from '../stages';
-import type { Page } from '../page';
+import type { DiagramConfig } from '../../diagram';
+import type { Stage } from '../../stages';
+import type { Page } from '../../page';
 
 /* A minimal three-layer constellation -- placeholder content, not an
    authored model page. It exists to prove the component library (stage-rail
    / flow-diagram / FlowEngine / CommentLayer) works for a layer count and
    flow pattern other than the four-tier walkthrough in
-   content/insight-inference.ts, without asserting anything about the actual
+   pages/index/index.ts, without asserting anything about the actual
    S/O model. */
 export const DEMO_DIAGRAM: DiagramConfig = {
   layers: [

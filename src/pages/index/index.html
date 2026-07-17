@@ -11,11 +11,14 @@
 </head>
 <body>
 
-<!-- header copy, rail, and diagram are all rendered by <page-scaffold> from
-     the Page descriptor in src/content/insight-inference.ts, mounted by
-     src/pages/insight-inference.ts. -->
 <div id="app"></div>
 
-<script type="module" src="/src/pages/insight-inference.ts"></script>
+<script type="module">
+  import { html, render } from 'lit';
+  import '../../components/page-scaffold';
+  import { PAGE } from './index';
+
+  render(html`<page-scaffold .page=${PAGE}></page-scaffold>`, document.getElementById('app'));
+</script>
 </body>
 </html>
