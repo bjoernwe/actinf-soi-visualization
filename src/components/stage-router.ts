@@ -1,6 +1,6 @@
 import type { ReactiveController, ReactiveControllerHost } from 'lit';
-import { validateStage } from '../stages';
-import type { Page } from '../page';
+import { validateStage } from './model/stages';
+import type { Page } from './model/page';
 
 /* Everything mountPage() used to do to wire a rail to a Stage timeline,
    lifted into a Lit ReactiveController so <page-scaffold> can own it as a

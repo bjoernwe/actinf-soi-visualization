@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { Layer } from '../../diagram';
+import type { Layer } from '../model/diagram';
 import { LightDomElement } from '../light-dom-element';
 
 /* A single layer box. The `.tier` class and id are applied by <flow-diagram>

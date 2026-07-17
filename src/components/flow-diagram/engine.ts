@@ -1,6 +1,6 @@
-import { INTENSITY, COLORS, type IntensityValues } from '../../model';
-import type { Stage, Dir } from '../../stages';
-import { gapIds, type DiagramConfig } from '../../diagram';
+import { INTENSITY, COLORS, type IntensityValues } from '../model/model';
+import type { Stage, Dir } from '../model/stages';
+import { gapIds, type DiagramConfig } from '../model/diagram';
 import { CommentLayer } from './comments';
 
 const DIRS: Dir[] = ['down', 'up'];

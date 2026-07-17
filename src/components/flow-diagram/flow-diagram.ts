@@ -1,7 +1,7 @@
 import { html, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { DiagramConfig } from '../../diagram';
-import type { Stage } from '../../stages';
+import type { DiagramConfig } from '../model/diagram';
+import type { Stage } from '../model/stages';
 import { FlowEngine } from './engine';
 import { LightDomElement } from '../light-dom-element';
 import './tier-layer';

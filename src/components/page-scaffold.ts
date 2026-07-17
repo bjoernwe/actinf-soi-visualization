@@ -1,6 +1,6 @@
 import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { Page } from '../page';
+import type { Page } from './model/page';
 import { LightDomElement } from './light-dom-element';
 import { StageRouter } from './stage-router';
 import './stage-rail';

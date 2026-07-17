@@ -1,7 +1,7 @@
 import { html } from 'lit';
-import type { DiagramConfig } from '../../diagram';
-import type { Stage } from '../../stages';
-import type { Page } from '../../page';
+import type { DiagramConfig } from '../../components/model/diagram';
+import type { Stage } from '../../components/model/stages';
+import type { Page } from '../../components/model/page';
 
 export const DIAGRAM: DiagramConfig = {
   layers: [

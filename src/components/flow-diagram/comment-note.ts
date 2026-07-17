@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
-import type { Comment } from '../../stages';
+import type { Comment } from '../model/stages';
 import { LightDomElement } from '../light-dom-element';
 
 /* Renders one comment's content (tag/icon/body). Positioning and the
