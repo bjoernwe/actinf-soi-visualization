@@ -1,5 +1,7 @@
+import { html } from 'lit';
 import type { DiagramConfig } from '../diagram';
 import type { Stage } from '../stages';
+import type { Page } from '../page';
 
 /* A minimal three-layer constellation -- placeholder content, not an
    authored model page. It exists to prove the component library (stage-rail
@@ -39,3 +41,10 @@ export const DEMO_STAGES: Stage[] = [
     ],
   },
 ];
+
+export const PAGE: Page = {
+  eyebrow: html`component demo · not authored model content`,
+  heading: html`A three-layer <em>constellation</em>`,
+  config: DEMO_DIAGRAM,
+  stages: DEMO_STAGES,
+};

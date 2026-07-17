@@ -1,7 +1,5 @@
-import { mountPage } from '../page';
-import { DEMO_DIAGRAM, DEMO_STAGES } from '../content/demo';
+import { html, render } from 'lit';
+import '../components/page-scaffold';
+import { PAGE } from '../content/demo';
 
-const diagram = document.querySelector('flow-diagram')!;
-diagram.content = { config: DEMO_DIAGRAM, stage: DEMO_STAGES[0] };
-
-mountPage(diagram, DEMO_STAGES);
+render(html`<page-scaffold .page=${PAGE}></page-scaffold>`, document.getElementById('app')!);

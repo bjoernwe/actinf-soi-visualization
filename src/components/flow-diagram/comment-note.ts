@@ -1,18 +1,15 @@
-import { LitElement, html, nothing } from 'lit';
+import { html, nothing } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Comment } from '../../stages';
+import { LightDomElement } from '../light-dom-element';
 
 /* Renders one comment's content (tag/icon/body). Positioning and the
    comment/dock class are handled by CommentLayer (comments.ts), which owns
    the geometry math and needs the class applied synchronously at creation --
    see the note there on why that can't be this component's own job. */
 @customElement('comment-note')
-export class CommentNote extends LitElement {
+export class CommentNote extends LightDomElement {
   @property({ attribute: false }) def!: Comment;
-
-  createRenderRoot() {
-    return this;
-  }
 
   render() {
     const def = this.def;

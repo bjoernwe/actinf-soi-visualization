@@ -1,6 +1,7 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Layer } from '../../diagram';
+import { LightDomElement } from '../light-dom-element';
 
 /* A single layer box. The `.tier` class and id are applied by <flow-diagram>
    directly in its own template (not here), so they're present synchronously
@@ -8,12 +9,8 @@ import type { Layer } from '../../diagram';
    accurate immediately, before this component's own (Lit-scheduled, async)
    first render has painted its text. */
 @customElement('tier-layer')
-export class TierLayer extends LitElement {
+export class TierLayer extends LightDomElement {
   @property({ attribute: false }) layer!: Layer;
-
-  createRenderRoot() {
-    return this;
-  }
 
   render() {
     return html`

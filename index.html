@@ -11,23 +11,10 @@
 </head>
 <body>
 
-<div class="wrap">
-  <header>
-    <div class="eyebrow">a walkthrough · A&amp;P <b>→</b> dissolution <b>→</b> dark night <b>→</b> equanimity</div>
-    <h1>The Progress of Insight as <em>hierarchical inference</em></h1>
-  </header>
-
-  <main>
-    <!-- rail -->
-    <nav class="rail" aria-label="Stages">
-      <stage-rail></stage-rail>
-    </nav>
-
-    <!-- content (MAIN_DIAGRAM + active Stage) assigned explicitly in
-         src/pages/insight-inference.ts via diagram.content = { config, stage } -->
-    <flow-diagram class="diagram"></flow-diagram>
-  </main>
-</div>
+<!-- header copy, rail, and diagram are all rendered by <page-scaffold> from
+     the Page descriptor in src/content/insight-inference.ts, mounted by
+     src/pages/insight-inference.ts. -->
+<div id="app"></div>
 
 <script type="module" src="/src/pages/insight-inference.ts"></script>
 </body>

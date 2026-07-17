@@ -1,5 +1,6 @@
-import { LitElement, html } from 'lit';
+import { html } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
+import { LightDomElement } from './light-dom-element';
 
 export interface RailStage {
   short: string;
@@ -7,16 +8,12 @@ export interface RailStage {
 
 /* The stage timeline: a list of stage links plus prev/next. Emits
    'stage-select' (detail: { index }) rather than owning navigation itself --
-   the page bootstrap owns hash routing and keyboard nav, since those are
-   page-level concerns, not the rail's. */
+   the page owns hash routing and keyboard nav (via StageRouter), since those
+   are page-level concerns, not the rail's. */
 @customElement('stage-rail')
-export class StageRail extends LitElement {
+export class StageRail extends LightDomElement {
   @property({ attribute: false }) stages: RailStage[] = [];
   @property({ type: Number }) current = -1;
-
-  createRenderRoot() {
-    return this;
-  }
 
   render() {
     return html`

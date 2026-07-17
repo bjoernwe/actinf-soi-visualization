@@ -1,7 +1,5 @@
-import { mountPage } from '../page';
-import { MAIN_DIAGRAM, STAGES } from '../content/insight-inference';
+import { html, render } from 'lit';
+import '../components/page-scaffold';
+import { PAGE } from '../content/insight-inference';
 
-const diagram = document.querySelector('flow-diagram')!;
-diagram.content = { config: MAIN_DIAGRAM, stage: STAGES[0] };
-
-mountPage(diagram, STAGES);
+render(html`<page-scaffold .page=${PAGE}></page-scaffold>`, document.getElementById('app')!);

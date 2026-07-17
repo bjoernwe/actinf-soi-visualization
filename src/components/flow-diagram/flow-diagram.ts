@@ -1,17 +1,18 @@
-import { LitElement, html, type PropertyValues } from 'lit';
+import { html, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { DiagramConfig } from '../../diagram';
 import type { Stage } from '../../stages';
 import { FlowEngine } from './engine';
+import { LightDomElement } from '../light-dom-element';
 import './tier-layer';
 import './comment-note';
 
-/* What a page hands this element: the DiagramConfig it's built for (fixed for
-   the element's lifetime) plus whichever Stage is currently active. Bundled
-   into one property -- rather than two separately-set ones -- so a page's
-   bootstrap has a single, explicit assignment to point at
-   (`diagram.content = { config, stage }`) instead of the wiring being spread
-   across a generic mountPage() reaching into the DOM. */
+/* What <page-scaffold> hands this element: the DiagramConfig it's built for
+   (fixed for the element's lifetime) plus whichever Stage is currently
+   active. Bundled into one property -- rather than two separately-set ones
+   -- so the scaffold's template has a single binding to point at
+   (`.content=${{ config, stage }}`) instead of the wiring being spread
+   across two. */
 export interface FlowDiagramContent {
   config: DiagramConfig;
   stage: Stage;
@@ -23,12 +24,8 @@ export interface FlowDiagramContent {
    engine itself stays a plain TS class (FlowEngine) -- this component's job
    is to render the DOM the engine measures and hand it stage changes. */
 @customElement('flow-diagram')
-export class FlowDiagram extends LitElement {
+export class FlowDiagram extends LightDomElement {
   @property({ attribute: false }) content!: FlowDiagramContent;
-
-  createRenderRoot() {
-    return this;
-  }
 
   private engine?: FlowEngine;
   private started = false;

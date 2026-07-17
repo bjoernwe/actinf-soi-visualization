@@ -1,5 +1,7 @@
+import { html } from 'lit';
 import type { DiagramConfig } from '../diagram';
 import type { Stage } from '../stages';
+import type { Page } from '../page';
 
 export const MAIN_DIAGRAM: DiagramConfig = {
   layers: [
@@ -109,3 +111,10 @@ export const STAGES: Stage[] = [
     ],
   },
 ];
+
+export const PAGE: Page = {
+  eyebrow: html`a walkthrough · A&amp;P <b>→</b> dissolution <b>→</b> dark night <b>→</b> equanimity`,
+  heading: html`The Progress of Insight as <em>hierarchical inference</em>`,
+  config: MAIN_DIAGRAM,
+  stages: STAGES,
+};
