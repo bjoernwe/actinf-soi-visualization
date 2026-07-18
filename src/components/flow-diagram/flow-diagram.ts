@@ -1,11 +1,10 @@
-import { html, type PropertyValues } from 'lit';
+import { LitElement, html, css } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { DiagramConfig } from '../model/diagram';
-import type { Stage } from '../model/stages';
-import { FlowEngine } from './engine';
-import { LightDomElement } from '../light-dom-element';
+import { gapIds } from '../model/diagram';
+import type { Stage, GapComment, TierComment } from '../model/stages';
 import './tier-layer';
-import './comment-note';
+import './flow-section';
 
 /* What <page-scaffold> hands this element: the DiagramConfig it's built for
    (fixed for the element's lifetime) plus whichever Stage is currently
@@ -18,58 +17,72 @@ export interface FlowDiagramContent {
   stage: Stage;
 }
 
-/* Hosts one diagram: the canvas particle stream, the tier stack, and the
-   comment layer, driven by a DiagramConfig (so a page composes whatever
-   layer constellation it needs) and the currently active Stage. The canvas
-   engine itself stays a plain TS class (FlowEngine) -- this component's job
-   is to render the DOM the engine measures and hand it stage changes. */
+/* Translates a DiagramConfig + Stage into the component tree: a <tier-layer>
+   per layer, a <flow-section> per gap (plus one for the intake region below
+   the last layer), each handed its own slice of the stage's streams and
+   comments. Carries no geometry of its own -- every region measures and
+   times itself, so growing one (a plain CSS custom property on that region)
+   can't disturb any other. */
 @customElement('flow-diagram')
-export class FlowDiagram extends LightDomElement {
+export class FlowDiagram extends LitElement {
   @property({ attribute: false }) content!: FlowDiagramContent;
 
-  private engine?: FlowEngine;
-  private started = false;
-  private onResize = () => this.engine?.resize();
+  static styles = css`
+    :host {
+      position: relative;
+      display: flex; flex-direction: column; gap: 4px;
+      border-radius: 14px;
+    }
+    .axis {
+      position: absolute; left: 2%; top: 30px; width: 1px;
+      bottom: calc(var(--intake-height, 160px) + 6px);
+      background: linear-gradient(180deg, #3a4165, #262c47);
+    }
+    .axis::before, .axis::after {
+      position: absolute; left: -4px; font-family: "Spline Sans Mono", monospace; font-size: 9.5px;
+      letter-spacing: .1em; text-transform: uppercase; color: #565c78; writing-mode: vertical-rl;
+    }
+    .axis::before { content: "slow · invariant"; top: 0; transform: translateX(-8px); }
+    .axis::after  { content: "fast · concrete";  bottom: 0; transform: translateX(-8px); }
+
+    @media (max-width: 1060px) {
+      .axis { display: none; }
+    }
+  `;
 
   render() {
+    const { config, stage } = this.content;
+    const gaps = gapIds(config);
+
+    const tierComment = (id: string): TierComment | undefined =>
+      stage.comments.find((c): c is TierComment => 'tier' in c && c.tier === id);
+    const gapComments = (gap: string): GapComment[] =>
+      stage.comments.filter((c): c is GapComment => !('tier' in c) && c.gap === gap);
+
     return html`
-      <canvas id="flow"></canvas>
       <div class="axis" aria-hidden="true"></div>
-      <div class="tier-stack">
-        ${this.content.config.layers.map(l => html`
-          <tier-layer class="tier" id=${'tier-' + l.id} .layer=${l}></tier-layer>
-        `)}
-      </div>
-      <div class="stream-label">the incoming stream</div>
-      <div class="comments"></div>
+      ${config.layers.map((layer, i) => html`
+        <tier-layer .layer=${layer} .dock=${tierComment(layer.id)}></tier-layer>
+        ${i < config.layers.length - 1 ? html`
+          <flow-section
+            .down=${stage.streams[gaps[i]].down}
+            .up=${stage.streams[gaps[i]].up}
+            .jit=${stage.jit}
+            .spd=${stage.spd}
+            .comments=${gapComments(gaps[i])}
+          ></flow-section>
+        ` : ''}
+      `)}
+      <flow-section
+        intake
+        label="the incoming stream"
+        .down=${stage.intake.out}
+        .up=${stage.intake.in}
+        .jit=${stage.jit}
+        .spd=${stage.spd}
+        .comments=${gapComments('intake')}
+      ></flow-section>
     `;
-  }
-
-  firstUpdated(): void {
-    const canvas = this.querySelector('#flow') as HTMLCanvasElement;
-    const tiers = [...this.querySelectorAll('tier-layer')] as HTMLElement[];
-    const commentContainer = this.querySelector('.comments') as HTMLElement;
-    this.engine = new FlowEngine(canvas, this, tiers, this.content.config, this.content.stage, commentContainer);
-    this.engine.resize();
-    this.engine.start();
-    window.addEventListener('resize', this.onResize);
-    // Docks are centred from their measured height, so re-place them once the
-    // web font swaps in and line-wrapping (hence height) may have changed.
-    if (document.fonts?.ready) document.fonts.ready.then(() => this.engine?.comments.layout());
-    this.started = true;
-  }
-
-  // Fires after firstUpdated() on the very first pass too, so this is the
-  // single place a stage change (including the initial one) reaches the
-  // engine -- no separate call needed in firstUpdated().
-  updated(changed: PropertyValues): void {
-    if (this.started && changed.has('content')) this.engine!.setStage(this.content.stage);
-  }
-
-  disconnectedCallback(): void {
-    super.disconnectedCallback();
-    window.removeEventListener('resize', this.onResize);
-    this.engine?.stop();
   }
 }
 

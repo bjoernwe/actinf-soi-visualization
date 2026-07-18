@@ -5,7 +5,7 @@ import type { Page } from '../../components/model/page';
 
 /* A minimal three-layer constellation -- placeholder content, not an
    authored model page. It exists to prove the component library (stage-rail
-   / flow-diagram / FlowEngine / CommentLayer) works for a layer count and
+   / flow-diagram / tier-layer / flow-section) works for a layer count and
    flow pattern other than the four-tier walkthrough in
    pages/index/index.ts, without asserting anything about the actual
    S/O model. */
