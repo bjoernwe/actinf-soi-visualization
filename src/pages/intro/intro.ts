@@ -39,7 +39,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
       { gap: 'g0', side: 'right', tag: 'High Precision', body: 'Attention can *increase precision*, leading to *higher errors* on mismatch ...' },
       { tier: 'bot', icon: '🧘', body: '*High* precision' },
     ],
@@ -51,7 +51,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
       { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision*, leading to *fewer errors* on mismatch.' },
       { tier: 'bot', icon: '🧘', body: '*Low* precision' },
     ],
@@ -74,7 +74,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)' },
+      { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)', faded: true },
       { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we are sitting still, *action* on the environment is *minimal* ...' },
       { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.' },
     ],

@@ -36,14 +36,22 @@ export interface IntakeFlow {
        icon: optional emoji, rendered upright in its own column beside
          the (italic) body so it never inherits the slant and multi-line
          bodies stay flush past it, not indented under the glyph.
-   Add, drop, or move entries freely — count and placement can differ per stage. */
-export interface GapComment {
+   Add, drop, or move entries freely — count and placement can differ per stage.
+   `faded` is how a stage carries an older comment forward as backdrop rather
+   than dropping it: repeat the same entry (or one with adjusted body) in the
+   next stage's list with `faded: true` so it visibly recedes while a new,
+   un-faded comment introduces what's changed -- a running commentary instead
+   of a clean swap. */
+export interface CommentBase {
+  faded?: boolean;
+}
+export interface GapComment extends CommentBase {
   gap: Gap | 'intake';
   side?: 'left' | 'right';
   tag: string;
   body: string;
 }
-export interface TierComment {
+export interface TierComment extends CommentBase {
   tier: Tier;
   icon?: string;
   body: string;

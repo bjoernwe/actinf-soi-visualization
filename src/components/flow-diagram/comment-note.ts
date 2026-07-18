@@ -1,4 +1,4 @@
-import { LitElement, html, css, nothing } from 'lit';
+import { LitElement, html, css, nothing, type PropertyValues } from 'lit';
 import { customElement, property } from 'lit/decorators.js';
 import type { Comment } from '../model/stages';
 import { monoLabel, commentVoice } from '../shared-styles';
@@ -7,10 +7,29 @@ import { monoLabel, commentVoice } from '../shared-styles';
    placement inside whichever parent hosts it (flow-section pins one beside
    a stream; tier-layer docks one over a layer's text). The host classes
    ('pin-left' | 'pin-right' | 'dock') are applied by that parent -- it owns
-   the anchor decision, this component only owns how a comment looks. */
+   the anchor decision, this component only owns how a comment looks --
+   including whether it's faded, which is why that's a reflected attribute
+   set from `def.faded` here rather than another class the parent has to
+   remember to pass through. */
 @customElement('comment-note')
 export class CommentNote extends LitElement {
   @property({ attribute: false }) def!: Comment;
+
+  protected willUpdate(changed: PropertyValues): void {
+    if (changed.has('def')) this.toggleAttribute('faded', !!this.def.faded);
+  }
+
+  connectedCallback(): void {
+    super.connectedCallback();
+    // The entrance animation (`commentIn`/`dockIn` below) holds its `to`
+    // keyframe's opacity:1 at the CSS-animation cascade layer for as long as
+    // it's "in effect" under fill-mode both -- which outranks the plain
+    // :host([faded]) rule below and would pin every comment at full opacity
+    // forever. Once the entrance finishes, `.settled` takes the animation
+    // out of the selector (see the reduced-motion block) and hands opacity
+    // back to the ordinary cascade, where faded and its transition apply.
+    this.addEventListener('animationend', () => this.classList.add('settled'), { once: true });
+  }
 
   static styles = css`
     :host {
@@ -24,7 +43,19 @@ export class CommentNote extends LitElement {
       /* the inward rule, softened so it reads as a quiet anchor rather than a
          hard bar -- a dimmed tint of the note accent. One knob for both sides. */
       --rule: color-mix(in srgb, var(--comment-accent) 55%, transparent);
+      transition: opacity .5s ease, filter .5s ease;
     }
+    /* A comment an author carries forward from an earlier stage rather than
+       drops -- see "faded" on Comment. Recedes toward the backdrop (dimmed,
+       desaturated, rule muted) instead of disappearing, so a fresh comment
+       elsewhere reads as the one thing that changed. Transition lives on
+       :host itself (above) so stepping into *and* out of faded both animate,
+       not just the entrance. */
+    :host([faded]) {
+      opacity: .4;
+      filter: saturate(.5);
+    }
+    :host([faded]:hover) { opacity: .75; }
     /* the inward rule is the only edge; the note sits flush against it
        (square corners on that side) and stays soft on the outer side. Which
        side is inward is the parent's call (pin-right = anchored on the
@@ -77,8 +108,8 @@ export class CommentNote extends LitElement {
        each time: the commentary settles in anew while the structure stays
        put. */
     @media (prefers-reduced-motion: no-preference) {
-      :host { animation: commentIn .42s cubic-bezier(.2,.7,.2,1) both; }
-      :host(.dock) { animation: dockIn .42s cubic-bezier(.2,.7,.2,1) both; }
+      :host(:not(.settled)) { animation: commentIn .42s cubic-bezier(.2,.7,.2,1) both; }
+      :host(.dock:not(.settled)) { animation: dockIn .42s cubic-bezier(.2,.7,.2,1) both; }
     }
     @keyframes commentIn {
       from { opacity: 0; transform: translateY(5px); filter: blur(2px); }
