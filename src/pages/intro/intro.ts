@@ -40,7 +40,7 @@ export const STAGES: Stage[] = [
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
-      { gap: 'g0', side: 'right', tag: 'High Precision', body: 'Attention can *increase precision* for a layer, leading to *higher errors* on mismatch ...' },
+      { gap: 'g0', side: 'right', tag: 'High Precision', body: 'Attention can *increase precision*, leading to *higher errors* on mismatch ...' },
       { tier: 'bot', icon: '🧘', body: '*High* precision' },
     ],
   },
@@ -52,8 +52,8 @@ export const STAGES: Stage[] = [
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
-      { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision* on a layer, leading to *fewer errors* on mismatch.' },
-      { tier: 'bot', icon: '🧘', body: '*Low* precision' },
+      { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision*, leading to *fewer errors* on mismatch.' },
+
     ],
   },
   {
