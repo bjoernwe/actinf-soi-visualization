@@ -79,6 +79,19 @@ export const STAGES: Stage[] = [
       { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.' },
     ],
   },
+  {
+    short: 'Error (ongoing...)',
+    streams: {
+      g0: { down: 'med', up: 'high' },
+    },
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    comments: [
+      { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)', faded: true },
+      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we are sitting still, *action* on the environment is *minimal* ...', faded: true },
+      { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.', faded: true },
+      { tier: 'top', icon: '🥵', body: '*Now the pressure is here!* — Which gives us the tools to speculate about the *Stages of Insight* ...' },
+    ],
+  },
 ];
 
 export const PAGE: Page = {
