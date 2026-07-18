@@ -9,7 +9,7 @@ export const DIAGRAM: DiagramConfig = {
     { id: 'bot', title: 'Layer 1', sub: 'consolidating priors & evidence' },
   ],
   environmentLabel: 'environment',
-  axisLabels: { top: 'slow · invariant', bottom: 'fast · concrete' },
+  axisLabels: { top: 'high', bottom: 'low' },
 };
 
 export const STAGES: Stage[] = [
@@ -91,7 +91,7 @@ export const STAGES: Stage[] = [
       { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)', faded: true },
       { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we\'re sitting still, *action* on the environment is forced to be *minimal* ...', faded: true },
       { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.', faded: true },
-      { tier: 'top', icon: '🥵', body: '*Now the pressure is up here!* — Just because we were sitting still and put attention to sensory details. What would happen if we continue to do so...?', link: { label: 'Stages of Insight', url: 'stages-of-insight.html' } },
+      { tier: 'top', icon: '🥵', body: '*Now the pressure is up here!* — Just because we sat still and put attention to sensory details. What would happen if we continue to do so...?', link: { label: 'Stages of Insight', url: 'stages-of-insight.html' } },
     ],
   },
 ];
