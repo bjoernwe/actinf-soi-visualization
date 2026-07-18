@@ -5,37 +5,37 @@ import type { Page } from '../../components/model/page';
 
 export const DIAGRAM: DiagramConfig = {
   layers: [
-    { id: 'top', title: 'Layer A', sub: 'placeholder — top layer' },
-    { id: 'bot', title: 'Layer B', sub: 'placeholder — bottom layer' },
+    { id: 'top', title: 'Layer 0 (priors)', sub: 'sending predictions / expectations downwards' },
+    { id: 'bot', title: 'Layer 1', sub: 'consolidating priors & evidence' },
   ],
 };
 
 export const STAGES: Stage[] = [
   {
-    short: 'Calm',
+    short: 'Input Prediction',
     streams: {
-      g0: { down: 'low', up: 'low' },
+      g0: { down: 'med', up: 'low' },
     },
-    intake: { in: 'low', out: 'low' }, jit: 1, spd: 1,
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', tag: 'Two Layers, One Gap', body: 'A different constellation than the walkthrough\'s four tiers -- same components, same engine, just a different DiagramConfig.' },
+      { gap: 'g0', side: 'right', tag: 'Predicting input', body: 'To the degree that *Layer 1*\'s input can be predicted, few prediction errors are sent upwards.' },
     ],
   },
   {
-    short: 'Turbulent',
+    short: 'Sitting Still',
     streams: {
-      g0: { down: 'high', up: 'high' },
+      g0: { down: 'med', up: 'low' },
     },
-    intake: { in: 'high', out: 'high' }, jit: 3, spd: 1.8,
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { tier: 'bot', icon: '⚡', body: 'Higher intensities, faster flow -- proving the tween and particle system generalize too.' },
+      { gap: 'intake', side: 'left', tag: 'Sitting Still', body: 'During seated meditation, *actions* on the environment are *minimal* — leaving only (passive) inference to minimize prediction errors.' },
     ],
   },
 ];
 
 export const PAGE: Page = {
-  eyebrow: html`component demo · not authored model content`,
-  heading: html`A two-layer <em>constellation</em>`,
+  eyebrow: html`intro`,
+  heading: html`Title with <em>emphasis</em>`,
   config: DIAGRAM,
   stages: STAGES,
 };
