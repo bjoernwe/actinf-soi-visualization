@@ -12,6 +12,11 @@ export interface Layer {
 export interface DiagramConfig {
   layers: Layer[];
   environmentLabel: string;
+  /* Captions for the vertical layer axis, read top-to-bottom (e.g. "slow ·
+     invariant" at the top layer, "fast · concrete" at the bottom) --
+     authored content, so it lives on the diagram's own config rather than
+     fixed inside <flow-diagram>. */
+  axisLabels: { top: string; bottom: string };
 }
 
 /* Gap ids are positional: 'g0' sits between layers[0] and layers[1], etc. --

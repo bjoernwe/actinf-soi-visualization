@@ -9,6 +9,7 @@ export const DIAGRAM: DiagramConfig = {
     { id: 'bot', title: 'Layer 1', sub: 'consolidating priors & evidence' },
   ],
   environmentLabel: 'environment',
+  axisLabels: { top: 'slow · invariant', bottom: 'fast · concrete' },
 };
 
 export const STAGES: Stage[] = [

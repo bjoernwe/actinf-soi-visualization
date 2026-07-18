@@ -3,6 +3,7 @@ import { customElement, property } from 'lit/decorators.js';
 import type { DiagramConfig } from '../model/diagram';
 import { gapIds } from '../model/diagram';
 import type { Stage, GapComment, TierComment } from '../model/stages';
+import { monoLabel } from '../shared-styles';
 import './tier-layer';
 import './flow-section';
 
@@ -38,12 +39,12 @@ export class FlowDiagram extends LitElement {
       bottom: calc(var(--intake-height, 160px) + 6px);
       background: linear-gradient(180deg, #3a4165, #262c47);
     }
-    .axis::before, .axis::after {
-      position: absolute; left: -4px; font-family: "Spline Sans Mono", monospace; font-size: 9.5px;
-      letter-spacing: .1em; text-transform: uppercase; color: #565c78; writing-mode: vertical-rl;
+    .axis-label {
+      position: absolute; left: -4px; font-size: 9.5px; color: #565c78; writing-mode: vertical-rl;
+      ${monoLabel}
     }
-    .axis::before { content: "slow · invariant"; top: 0; transform: translateX(-8px); }
-    .axis::after  { content: "fast · concrete";  bottom: 0; transform: translateX(-8px); }
+    .axis-label.top    { top: 0; transform: translateX(-8px); }
+    .axis-label.bottom { bottom: 0; transform: translateX(-8px); }
 
     @media (max-width: 1060px) {
       .axis { display: none; }
@@ -60,7 +61,10 @@ export class FlowDiagram extends LitElement {
       stage.comments.filter((c): c is GapComment => !('tier' in c) && c.gap === gap);
 
     return html`
-      <div class="axis" aria-hidden="true"></div>
+      <div class="axis" aria-hidden="true">
+        <span class="axis-label top">${config.axisLabels.top}</span>
+        <span class="axis-label bottom">${config.axisLabels.bottom}</span>
+      </div>
       ${config.layers.map((layer, i) => html`
         <tier-layer .layer=${layer} .dock=${tierComment(layer.id)}></tier-layer>
         ${i < config.layers.length - 1 ? html`

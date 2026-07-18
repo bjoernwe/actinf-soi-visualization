@@ -11,6 +11,7 @@ export const MAIN_DIAGRAM: DiagramConfig = {
     { id: 'sense', title: 'Sensory layer', sub: 'sensory details · texture · vibration' },
   ],
   environmentLabel: 'environment',
+  axisLabels: { top: 'slow · invariant', bottom: 'fast · concrete' },
 };
 
 /* Baseline is authored to match the comment slots' narrative:
