@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && rm -rf dist && PAGE=intro vite build && PAGE=main vite build && PAGE=componentDemo vite build",
+    "build": "tsc && rm -rf dist && PAGE=intro vite build && PAGE=soi vite build",
     "preview": "vite preview"
   },
   "devDependencies": {

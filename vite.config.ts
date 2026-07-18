@@ -9,8 +9,7 @@ import { viteSingleFile } from 'vite-plugin-singlefile';
 // under src/pages/.
 const PAGES: Record<string, string> = {
   intro: 'src/pages/intro/intro.html',
-  main: 'src/pages/index/index.html',
-  componentDemo: 'src/pages/component-demo/component-demo.html',
+  soi: 'src/pages/soi/stages-of-insight.html',
 };
 
 // vite-plugin-singlefile inlines a build's JS/CSS into one self-contained
