@@ -17,7 +17,7 @@ export class StageRail extends LightDomElement {
 
   render() {
     return html`
-      <div class="rail-title">The path</div>
+      <div class="rail-title">Chapters</div>
       <ol>
         ${this.stages.map((s, i) => html`
           <li class=${i === this.current ? 'active' : ''}>
