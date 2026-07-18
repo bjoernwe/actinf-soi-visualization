@@ -43,18 +43,17 @@ export interface IntakeFlow {
    un-faded comment introduces what's changed -- a running commentary instead
    of a clean swap. */
 export interface CommentBase {
+  body: string;
   faded?: boolean;
 }
 export interface GapComment extends CommentBase {
   gap: Gap | 'intake';
   side?: 'left' | 'right';
   tag: string;
-  body: string;
 }
 export interface TierComment extends CommentBase {
   tier: Tier;
   icon?: string;
-  body: string;
 }
 export type Comment = GapComment | TierComment;
 
