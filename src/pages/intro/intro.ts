@@ -53,18 +53,30 @@ export const STAGES: Stage[] = [
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
       { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision*, leading to *fewer errors* on mismatch.' },
-
+      { tier: 'bot', icon: '🧘', body: '*Low* precision' },
     ],
   },
   {
-    short: 'Sitting Still',
+    short: 'Error (fixing)',
     streams: {
-      g0: { down: 'high', up: 'med' },
+      g0: { down: 'med', up: 'low' },
+    },
+    intake: { in: 'high', out: 'high' }, jit: 3, spd: 1,
+    comments: [
+      { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards) ...' },
+      { gap: 'intake', side: 'left', tag: '💪 Fix problem', body: '... trying to fix the circumstances.' },
+    ],
+  },
+  {
+    short: 'Error (escalating)',
+    streams: {
+      g0: { down: 'med', up: 'high' },
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'intake', side: 'left', tag: 'Seated Meditation', body: 'When sitting still, *action* on the environment is *minimal*.' },
-      { gap: 'intake', side: 'right', tag: 'Sensory Input', body: 'Sensory input is always there (but maybe predicted away).' },
+      { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)' },
+      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we are sitting still, *action* on the environment is *minimal* ...' },
+      { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.' },
     ],
   },
 ];
