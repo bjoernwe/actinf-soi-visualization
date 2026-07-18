@@ -16,44 +16,44 @@ export const STAGES: Stage[] = [
     streams: {
       g0: { down: 'high', up: 'med' },
     },
-    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    intake: { in: 'high', out: 'med' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: 'Predicting input', body: 'Predictions flow downwards as *priors*' },
+      { gap: 'g0', side: 'left', tag: 'Predicting input', body: 'Predictions flow downwards as *priors*.' },
       { gap: 'g0', side: 'right', tag: 'Residual errors', body: 'Errors reflect how much of *Layer 1*\'s input can\'t be predicted.' },
     ],
   },
   {
     short: 'Attention',
     streams: {
-      g0: { down: 'high', up: 'med' },
+      g0: { down: 'med', up: 'med' },
     },
-    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    intake: { in: 'high', out: 'med' }, jit: 3, spd: 1,
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
     ],
   },
   {
-    short: 'Attention (high)',
+    short: 'Attention (low)',
     streams: {
-      g0: { down: 'high', up: 'high' },
+      g0: { down: 'med', up: 'low' },
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
-      { gap: 'g0', side: 'right', tag: 'High Precision', body: 'Attention can *increase precision*, leading to *higher errors* on mismatch ...' },
-      { tier: 'bot', icon: '🧘', body: '*High* precision' },
+      { gap: 'g0', side: 'right', tag: 'Low Precision', body: 'Attention can *decrease precision*, leading to *fewer errors* on mismatch ...' },
+      { tier: 'bot', icon: '🧘', body: '*Low* precision' },
     ],
   },
   {
-    short: 'Attention (low)',
+    short: 'Attention (high)',
     streams: {
-      g0: { down: 'high', up: 'low' },
+      g0: { down: 'med', up: 'high' },
     },
-    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    intake: { in: 'high', out: 'high' }, jit: 3, spd: 1,
     comments: [
       { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
-      { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision*, leading to *fewer errors* on mismatch.' },
-      { tier: 'bot', icon: '🧘', body: '*Low* precision' },
+      { gap: 'g0', side: 'right', tag: 'High Precision', body: '... or *increase precision*, leading to *more errors* on mismatch.' },
+      { tier: 'bot', icon: '🧘', body: '*High* precision *➡️* more pressure to resolve error *🥵*' },
     ],
   },
   {
@@ -75,7 +75,7 @@ export const STAGES: Stage[] = [
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
       { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)', faded: true },
-      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we are sitting still, *action* on the environment is *minimal* ...' },
+      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we\'re sitting still, *action* on the environment is forced to be *minimal* ...' },
       { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.' },
     ],
   },
@@ -87,9 +87,9 @@ export const STAGES: Stage[] = [
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
       { tier: 'bot', icon: '🥵', body: 'When prior and evidence don\'t match, first error handling strategy is to push back (downwards)', faded: true },
-      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we are sitting still, *action* on the environment is *minimal* ...', faded: true },
+      { gap: 'intake', side: 'left', tag: '🧘 Seated Meditation', body: 'But when we\'re sitting still, *action* on the environment is forced to be *minimal* ...', faded: true },
       { gap: 'g0', side: 'right', tag: 'Escalating Error', body: '... forcing the error to be propagated upwards.', faded: true },
-      { tier: 'top', icon: '🥵', body: '*Now the pressure is here!* — Which gives us the tools to speculate about the *Stages of Insight* ...' },
+      { tier: 'top', icon: '🥵', body: '*Now the pressure is up here!* — Just because we were sitting still and put attention to sensory details. What would happen if we continue to do so...?', link: { label: 'Stages of Insight', url: 'stages-of-insight.html' } },
     ],
   },
 ];

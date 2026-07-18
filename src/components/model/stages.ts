@@ -45,6 +45,10 @@ export interface IntakeFlow {
 export interface CommentBase {
   body: string;
   faded?: boolean;
+  /* An optional citation/reference: a small right-aligned link with a globe
+     glyph, rendered under the body. `label` is the link text (e.g. a source
+     name), `url` where it points. */
+  link?: { url: string; label: string };
 }
 export interface GapComment extends CommentBase {
   gap: Gap | 'intake';

@@ -104,6 +104,24 @@ export class CommentNote extends LitElement {
        of markdown's usual italic -- with a touch more weight. */
     .stress { font-style: normal; font-weight: 500; }
 
+    /* Optional source link: right-aligned, under the body, quiet until
+       hovered so it reads as provenance rather than a call to action. */
+    .comment-link {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 4px;
+      margin-top: 7px;
+      font-family: "Spline Sans Mono", monospace;
+      font-size: 10.5px;
+      letter-spacing: .02em;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color .2s ease;
+    }
+    .comment-link:hover { color: var(--comment-accent); }
+    .comment-link svg { flex: none; width: 11px; height: 11px; }
+
     /* Comments are rebuilt on every stage change, so this entrance replays
        each time: the commentary settles in anew while the structure stays
        put. */
@@ -132,7 +150,18 @@ export class CommentNote extends LitElement {
     return html`
       ${!isTier ? html`<div class="comment-tag">${def.tag}</div>` : nothing}
       ${isTier && def.icon ? html`<span class="comment-icon">${def.icon}</span>` : nothing}
-      <p>${this.renderBody(def.body)}</p>
+      <div>
+        <p>${this.renderBody(def.body)}</p>
+        ${def.link ? html`
+          <a class="comment-link" href=${def.link.url} target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.3">
+              <circle cx="8" cy="8" r="6.5" />
+              <path d="M1.5 8h13M8 1.5c2.2 2.2 2.2 11 0 13M8 1.5c-2.2 2.2-2.2 11 0 13" />
+            </svg>
+            ${def.link.label}
+          </a>
+        ` : nothing}
+      </div>
     `;
   }
 
