@@ -31,7 +31,7 @@ export class TierLayer extends LitElement {
       box-shadow: inset 0 1px 0 rgba(233,229,216,.05),
                   inset 0 -1px 0 rgba(0,0,0,.28);
     }
-    h3 { font-family: "Fraunces", serif; font-weight: 430; font-size: 17.5px; letter-spacing: .01em; }
+    h3 { margin: 0; font-family: "Fraunces", serif; font-weight: 430; font-size: 17.5px; letter-spacing: .01em; }
     /* the gap to the title is opened up so the label pair sits evenly inside
        the centred box rather than clustering tight in the middle. */
     .sub {

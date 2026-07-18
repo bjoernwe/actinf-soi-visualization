@@ -13,6 +13,12 @@ const rgba = (c: readonly [number, number, number], a: number) => `rgba(${c[0]},
    fraction for the comment columns' inner clearance. */
 const STREAM_OFF = 0.05;
 
+/* the intake region's own label ("the incoming stream") sits at the bottom
+   of its box; this is how much of the box's height the stream stops short
+   of, so the label reads as sitting below the stream instead of the stream
+   animating straight through it. */
+const LABEL_RESERVE = 24;
+
 interface Particle { dir: 'down' | 'up'; t: number; v: number; ph: number; fq: number; ox: number; }
 type Lanes = Record<'down' | 'up', IntensityValues>;
 
@@ -58,6 +64,11 @@ export class FlowSection extends LitElement {
       display: flex; flex-direction: column; justify-content: center; gap: 10px;
       pointer-events: none;
     }
+    /* the intake region's stream stops --label-reserve short of the box's
+       bottom edge (see LABEL_RESERVE in the frame loop); centering a comment
+       on the box's full height would sit it visibly lower than the stream it
+       annotates, so its column is centered on that same shorter range. */
+    :host([intake]) .side { padding-bottom: var(--label-reserve, 0px); }
     .side comment-note { pointer-events: auto; }
     .side.left  { grid-column: 1; align-items: flex-end; }
     .side.right { grid-column: 3; align-items: flex-start; }
@@ -91,6 +102,10 @@ export class FlowSection extends LitElement {
     // grid-template-columns below); set from the same INTENSITY table the
     // canvas reads its breadth from, so the two can't drift apart.
     this.style.setProperty('--max-breadth', `${MAX_BREADTH}px`);
+    // --label-reserve keeps the intake comment column's centering in sync
+    // with LABEL_RESERVE, the same constant the frame loop uses to keep the
+    // stream itself short of the label -- see the .side rule above.
+    this.style.setProperty('--label-reserve', `${LABEL_RESERVE}px`);
   }
 
   firstUpdated(): void {
@@ -153,6 +168,7 @@ export class FlowSection extends LitElement {
     this.ctx.clearRect(0, 0, this.W, this.H);
 
     const predX = this.W * (0.5 - STREAM_OFF), errX = this.W * (0.5 + STREAM_OFF);
+    const travelH = this.label ? this.H - LABEL_RESERVE : this.H;
 
     const trySpawn = (key: 'down' | 'up') => {
       this.acc[key] += this.live[key].rate * dt;
@@ -170,7 +186,7 @@ export class FlowSection extends LitElement {
       const x0 = down ? predX : errX;
       const x = x0 + p.ox * lane.breadth + Math.sin(p.t * p.fq + p.ph) * this.jit;
       // predictions descend (t=0 at top -> t=1 at bottom); error ascends.
-      const y = down ? this.H * p.t : this.H * (1 - p.t);
+      const y = down ? travelH * p.t : travelH * (1 - p.t);
       const col = down ? COLORS.pred : COLORS.err;
       const edge = Math.min(p.t, 1 - p.t) * 6;
       const alpha = lane.alpha * Math.min(edge, 1);

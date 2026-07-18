@@ -13,8 +13,8 @@
      each region owns its own height, so changing one of these reflows just
      that region, not the whole diagram. */
   --tier-width: 76%;
-  --flow-height: 130px;
-  --intake-height: 160px;
+  --flow-height: 180px;
+  --intake-height: 180px;
   /* how far the pred/err lanes sit from a gap's center, as a fraction of a
      flow section's own width -- together with --max-breadth (set in JS by
      flow-section.ts from the same INTENSITY table the canvas itself reads,
