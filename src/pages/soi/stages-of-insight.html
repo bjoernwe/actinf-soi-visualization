@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Component Library Demo</title>
+<title>Modeling Stages of Insight</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Spline+Sans:wght@300..600&family=Spline+Sans+Mono:wght@300..600&display=swap" rel="stylesheet">
@@ -11,15 +11,12 @@
 </head>
 <body>
 
-<!-- same <page-scaffold> as index.html; content (DEMO_DIAGRAM + DEMO_STAGES)
-     comes from ./component-demo.ts -- proves the diagram is data-driven
-     rather than hardcoded to the walkthrough's four tiers. -->
 <div id="app"></div>
 
 <script type="module">
   import { html, render } from 'lit';
   import '../../components/page-scaffold';
-  import { PAGE } from './component-demo';
+  import { PAGE } from './stages-of-insight';
 
   render(html`<page-scaffold .page=${PAGE}></page-scaffold>`, document.getElementById('app'));
 </script>

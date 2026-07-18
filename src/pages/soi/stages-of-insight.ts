@@ -113,8 +113,8 @@ export const STAGES: Stage[] = [
 ];
 
 export const PAGE: Page = {
-  eyebrow: html`a walkthrough · A&amp;P <b>→</b> dissolution <b>→</b> dark night <b>→</b> equanimity`,
-  heading: html`The Progress of Insight as <em>hierarchical inference</em>`,
+  eyebrow: html`Active Inference`,
+  heading: html`Modeling <em>Stages of Insight</em>`,
   config: MAIN_DIAGRAM,
   stages: STAGES,
 };
