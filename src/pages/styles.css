@@ -8,8 +8,18 @@
   --err: #e88c4a;    /* prediction error, ascending */
   --comment-accent: #c7c3b6;   /* neutral note edge, tied to neither stream */
   --maxw: 1240px;
+  /* diagram layout tokens (see .tier-stack): the ~130px gap the streams
+     travel between tiers, and the lead-in/intake padding above and below
+     the stack. Changing these reflows the whole diagram -- nothing else
+     needs to move in step. */
+  --tier-width: 76%;
+  --tier-gap: 130px;
+  --stack-pad-top: 24px;
+  --stack-pad-bottom: 160px;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
+/* custom elements default to display:inline until told otherwise */
+stage-rail, flow-diagram, tier-layer, comment-note { display: block; }
 body {
   background: var(--ink);
   background-image: radial-gradient(1200px 600px at 70% -10%, #1b2140 0%, transparent 60%),
@@ -73,17 +83,32 @@ nav.rail { position: sticky; top: 24px; }
 .rail-nav-btn:disabled { opacity: .32; cursor: default; }
 
 /* ---------- diagram ---------- */
-.diagram { position: relative; height: 1030px; border-radius: 14px; }
+/* the tier stack is normal-flow content; .diagram has no fixed height, so it
+   sizes to whatever that stack measures -- resizing a tier reflows the gaps
+   and the intake region below it instead of breaking the layout. */
+.diagram { position: relative; border-radius: 14px; }
 canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
+/* tier-stack owns the vertical rhythm in one place: --tier-gap is the ~130px
+   the streams travel between tiers (room for a three-line gap comment);
+   --stack-pad-top/-bottom reserve the lead-in above the first tier and the
+   intake region (+ stream-label) below the last one. Geometry is read from
+   the tier boxes each frame, so the canvas streams follow whatever this
+   stack measures out to. */
+.tier-stack {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column;
+  gap: var(--tier-gap);
+  padding: var(--stack-pad-top) 0 var(--stack-pad-bottom);
+}
 .tier {
-  position: absolute; left: 12%; width: 76%;
+  width: var(--tier-width); margin: 0 auto;
   /* tall enough to contain a three-line docked comment with its inset; the
      label is centred so the extra height doesn't leave the box top-heavy. */
   min-height: 114px;
   display: flex; flex-direction: column; justify-content: center;
   background: linear-gradient(180deg, var(--card), #171c2f);
   border: 1px solid var(--card-edge); border-radius: 9px;
-  padding: 13px 18px 14px; z-index: 2;
+  padding: 13px 18px 14px;
   /* structure is etched into the plane, not floating above it: an inset
      top highlight + bottom shade seats each tier into the substrate, the
      opposite of the comment layer's drop-shadowed float. */
@@ -94,13 +119,6 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
 /* the gap to the title is opened up so the label pair sits evenly inside the
    centred box rather than clustering tight in the middle of the tall tier. */
 .tier .sub { font-family: "Spline Sans Mono", monospace; font-size: 10.5px; color: var(--muted); letter-spacing: .08em; text-transform: uppercase; margin-top: 9px; }
-/* tops give the streams ~130px gaps between the taller tiers, so a three-line
-   gap comment can sit in the gap with room to breathe (geometry is read from
-   these boxes each frame, so the streams follow). */
-#tier-self-high { top: 24px; }
-#tier-self-low  { top: 268px; }
-#tier-object    { top: 512px; }
-#tier-sense     { top: 756px; }
 /* ---------- comment slots ----------
    Root-text vs commentary. The tiers are the fixed structure of the model,
    set in type and etched into the page; a comment is the stage-dependent
@@ -205,7 +223,7 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
   text-transform: uppercase; color: #565c78; z-index: 2;
 }
 .axis {
-  position: absolute; left: 2%; top: 30px; bottom: 160px; width: 1px; z-index: 1;
+  position: absolute; left: 2%; top: 30px; bottom: var(--stack-pad-bottom); width: 1px; z-index: 1;
   background: linear-gradient(180deg, #3a4165, #262c47);
 }
 .axis::before, .axis::after {
@@ -222,7 +240,6 @@ canvas#flow { position: absolute; inset: 0; width: 100%; height: 100%; }
   .rail ol::before { display: none; }
   .rail li { padding-left: 18px; }
   .rail li::before { top: 12px; }
-  .diagram { height: 1030px; }
   .axis { display: none; }
-  .tier { left: 6%; width: 88%; }
+  .tier { --tier-width: 88%; }
 }
