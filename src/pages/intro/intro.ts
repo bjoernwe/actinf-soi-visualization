@@ -12,30 +12,66 @@ export const DIAGRAM: DiagramConfig = {
 
 export const STAGES: Stage[] = [
   {
-    short: 'Input Prediction',
+    short: 'Priors & Errors',
     streams: {
-      g0: { down: 'med', up: 'low' },
+      g0: { down: 'high', up: 'med' },
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'right', tag: 'Predicting input', body: 'To the degree that *Layer 1*\'s input can be predicted, few prediction errors are sent upwards.' },
+      { gap: 'g0', side: 'left', tag: 'Predicting input', body: 'Predictions flow downwards as *priors*' },
+      { gap: 'g0', side: 'right', tag: 'Residual errors', body: 'Errors reflect how much of *Layer 1*\'s input can\'t be predicted.' },
+    ],
+  },
+  {
+    short: 'Attention',
+    streams: {
+      g0: { down: 'high', up: 'med' },
+    },
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    comments: [
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+    ],
+  },
+  {
+    short: 'Attention (high)',
+    streams: {
+      g0: { down: 'high', up: 'high' },
+    },
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    comments: [
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+      { gap: 'g0', side: 'right', tag: 'High Precision', body: 'Attention can *increase precision* for a layer, leading to *higher errors* on mismatch ...' },
+      { tier: 'bot', icon: '🧘', body: '*High* precision' },
+    ],
+  },
+  {
+    short: 'Attention (low)',
+    streams: {
+      g0: { down: 'high', up: 'low' },
+    },
+    intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
+    comments: [
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+      { gap: 'g0', side: 'right', tag: 'Low Precision', body: '... or *decrease precision* on a layer, leading to *fewer errors* on mismatch.' },
+      { tier: 'bot', icon: '🧘', body: '*Low* precision' },
     ],
   },
   {
     short: 'Sitting Still',
     streams: {
-      g0: { down: 'med', up: 'low' },
+      g0: { down: 'high', up: 'med' },
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'intake', side: 'left', tag: 'Sitting Still', body: 'During seated meditation, *actions* on the environment are *minimal* — leaving only (passive) inference to minimize prediction errors.' },
+      { gap: 'intake', side: 'left', tag: 'Seated Meditation', body: 'When sitting still, *action* on the environment is *minimal*.' },
+      { gap: 'intake', side: 'right', tag: 'Sensory Input', body: 'Sensory input is always there (but maybe predicted away).' },
     ],
   },
 ];
 
 export const PAGE: Page = {
-  eyebrow: html`intro`,
-  heading: html`Title with <em>emphasis</em>`,
+  eyebrow: html`Active Inference`,
+  heading: html`Modeling <em>meditation</em>`,
   config: DIAGRAM,
   stages: STAGES,
 };
