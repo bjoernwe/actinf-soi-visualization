@@ -85,10 +85,13 @@ export class CommentNote extends LitElement {
       to   { opacity: 1; transform: none;             filter: blur(0);   }
     }
     /* the dock slides in from the right -- reading as the note sliding over
-       the layer to cover it. */
+       the layer to cover it. Both keyframes keep the translateY(-50%) that
+       tier-layer applies externally for vertical centering -- ending on
+       transform: none would clobber it once the animation's fill-mode holds
+       the final keyframe. */
     @keyframes dockIn {
-      from { opacity: 0; transform: translateX(7px); filter: blur(2px); }
-      to   { opacity: 1; transform: none;            filter: blur(0);   }
+      from { opacity: 0; transform: translateY(-50%) translateX(7px); filter: blur(2px); }
+      to   { opacity: 1; transform: translateY(-50%);                 filter: blur(0);   }
     }
   `;
 
