@@ -75,7 +75,7 @@ export class FlowDiagram extends LitElement {
       `)}
       <flow-section
         intake
-        label="the incoming stream"
+        label=${config.intakeLabel}
         .down=${stage.intake.out}
         .up=${stage.intake.in}
         .jit=${stage.jit}

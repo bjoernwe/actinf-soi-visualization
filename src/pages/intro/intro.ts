@@ -8,6 +8,7 @@ export const DIAGRAM: DiagramConfig = {
     { id: 'top', title: 'Layer 0 (priors)', sub: 'sending predictions / expectations downwards' },
     { id: 'bot', title: 'Layer 1', sub: 'consolidating priors & evidence' },
   ],
+  intakeLabel: 'the incoming stream',
 };
 
 export const STAGES: Stage[] = [
