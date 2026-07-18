@@ -11,10 +11,7 @@ export interface Layer {
 
 export interface DiagramConfig {
   layers: Layer[];
-  /* Caption for the intake region below the last layer (e.g. "the incoming
-     stream") -- authored content, so it lives on the diagram's own config
-     rather than fixed inside <flow-diagram>. */
-  intakeLabel: string;
+  environmentLabel: string;
 }
 
 /* Gap ids are positional: 'g0' sits between layers[0] and layers[1], etc. --

@@ -10,7 +10,7 @@ export const MAIN_DIAGRAM: DiagramConfig = {
     { id: 'object', title: 'Object layer', sub: 'common things & scenes to act on & relate to' },
     { id: 'sense', title: 'Sensory layer', sub: 'sensory details · texture · vibration' },
   ],
-  intakeLabel: 'the incoming stream',
+  environmentLabel: 'environment',
 };
 
 /* Baseline is authored to match the comment slots' narrative:
