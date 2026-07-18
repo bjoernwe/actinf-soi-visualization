@@ -2,8 +2,6 @@ import type { Level } from './model';
 import type { DiagramConfig } from './diagram';
 import { gapIds } from './diagram';
 
-export type Dir = 'down' | 'up';
-
 /* Gap and tier ids used to be fixed unions ('g0'|'g1'|'g2', 'self-high'|...)
    when the diagram had exactly four hardcoded tiers. Now that a page supplies
    its own DiagramConfig (see diagram.ts), they're just strings, checked

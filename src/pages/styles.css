@@ -15,12 +15,11 @@
   --tier-width: 76%;
   --flow-height: 180px;
   --intake-height: 180px;
-  /* how far the pred/err lanes sit from a gap's center, as a fraction of a
-     flow section's own width -- together with --max-breadth (set in JS by
-     flow-section.ts from the same INTENSITY table the canvas itself reads,
-     so the two can't drift apart) it sizes the comment-clearing columns
-     beside each stream. */
-  --stream-off: 5%;
+  /* --stream-off (how far the pred/err lanes sit from a gap's center) and
+     --max-breadth (the widest a band reaches) size the comment-clearing
+     columns beside each stream. Both are set on the host in JS by
+     flow-section.ts, from the same STREAM_OFF / INTENSITY values the canvas
+     itself draws from, so the CSS clearance can't drift from the drawn lanes. */
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 /* custom elements default to display:inline until told otherwise */
@@ -70,7 +69,7 @@ nav.rail { position: sticky; top: 24px; }
   content: ""; position: absolute; left: 2px; top: 15px; width: 9px; height: 9px; border-radius: 50%;
   background: var(--ink); border: 1.5px solid #3a4165; transition: all .3s;
 }
-.rail li.active::before { background: var(--err); border-color: var(--err); box-shadow: 0 0 10px rgba(232,140,74,.55); }
+.rail li.active::before { background: var(--err); border-color: var(--err); box-shadow: 0 0 10px color-mix(in srgb, var(--err) 55%, transparent); }
 .rail li.active button.stage-link { color: var(--vellum); }
 .rail button.stage-link:hover { color: var(--vellum); }
 .rail button.stage-link:focus-visible { outline: 2px solid var(--pred); outline-offset: 3px; border-radius: 3px; }

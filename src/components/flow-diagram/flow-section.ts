@@ -9,8 +9,9 @@ const FIELDS: (keyof IntensityValues)[] = ['breadth', 'rate', 'alpha', 'size'];
 const rgba = (c: readonly [number, number, number], a: number) => `rgba(${c[0]},${c[1]},${c[2]},${a})`;
 
 /* how far the pred/err lanes sit from center, as a fraction of the section's
-   own width -- must match --stream-off below, which reserves the same
-   fraction for the comment columns' inner clearance. */
+   own width. The single source for both the canvas lane positions and the
+   --stream-off CSS var (set in connectedCallback) that reserves the matching
+   comment-column clearance, so the two can't drift apart. */
 const STREAM_OFF = 0.05;
 
 /* the intake region's own label ("the incoming stream") sits at the bottom
@@ -94,14 +95,22 @@ export class FlowSection extends LitElement {
   private H = 0;
   private dpr = 1;
 
+  private lanes(): Lanes {
+    return { down: { ...INTENSITY[this.down] }, up: { ...INTENSITY[this.up] } };
+  }
+
   connectedCallback(): void {
     super.connectedCallback();
-    this.live = { down: { ...INTENSITY[this.down] }, up: { ...INTENSITY[this.up] } };
-    this.target = { down: { ...INTENSITY[this.down] }, up: { ...INTENSITY[this.up] } };
+    this.live = this.lanes();
+    this.target = this.lanes();
     // --max-breadth sizes the comment-clearing columns (see :host's
     // grid-template-columns below); set from the same INTENSITY table the
     // canvas reads its breadth from, so the two can't drift apart.
     this.style.setProperty('--max-breadth', `${MAX_BREADTH}px`);
+    // --stream-off reserves the matching comment-column clearance beside each
+    // lane; set from the same STREAM_OFF the canvas positions lanes with, so
+    // the CSS clearance and the drawn lane offset can't drift apart.
+    this.style.setProperty('--stream-off', `${STREAM_OFF * 100}%`);
     // --label-reserve keeps the intake comment column's centering in sync
     // with LABEL_RESERVE, the same constant the frame loop uses to keep the
     // stream itself short of the label -- see the .side rule above.
@@ -123,7 +132,7 @@ export class FlowSection extends LitElement {
 
   updated(changed: PropertyValues): void {
     if (changed.has('down') || changed.has('up')) {
-      this.target = { down: { ...INTENSITY[this.down] }, up: { ...INTENSITY[this.up] } };
+      this.target = this.lanes();
     }
   }
 
@@ -155,6 +164,11 @@ export class FlowSection extends LitElement {
     });
   }
 
+  private trySpawn(key: 'down' | 'up', dt: number): void {
+    this.acc[key] += this.live[key].rate * dt;
+    while (this.acc[key] >= 1) { this.acc[key] -= 1; this.spawn(key); }
+  }
+
   private frame = (now: number): void => {
     const dt = Math.min((now - this.last) / 1000, 0.05);
     this.last = now;
@@ -170,11 +184,7 @@ export class FlowSection extends LitElement {
     const predX = this.W * (0.5 - STREAM_OFF), errX = this.W * (0.5 + STREAM_OFF);
     const travelH = this.label ? this.H - LABEL_RESERVE : this.H;
 
-    const trySpawn = (key: 'down' | 'up') => {
-      this.acc[key] += this.live[key].rate * dt;
-      while (this.acc[key] >= 1) { this.acc[key] -= 1; this.spawn(key); }
-    };
-    trySpawn('down'); trySpawn('up');
+    this.trySpawn('down', dt); this.trySpawn('up', dt);
 
     for (let i = this.parts.length - 1; i >= 0; i--) {
       const p = this.parts[i];
