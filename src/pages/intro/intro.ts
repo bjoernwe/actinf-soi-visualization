@@ -31,7 +31,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'med' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.' },
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Downstream predictions are about *content* as well as *precision*. The latter can be interpreted as *attention*.' },
     ],
   },
   {
@@ -41,7 +41,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'low' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Downstream predictions are about *content* as well as *precision*. The latter can be interpreted as *attention*.', faded: true },
       { gap: 'g0', side: 'right', tag: 'Low Precision', body: 'Attention can *decrease precision*, leading to *fewer errors* on mismatch ...' },
       { tier: 'bot', icon: '🧘', body: '*Low* precision' },
     ],
@@ -53,7 +53,7 @@ export const STAGES: Stage[] = [
     },
     intake: { in: 'high', out: 'high' }, jit: 3, spd: 1,
     comments: [
-      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Priors cal also be interpreted as *mental action*, namely *attention*.', faded: true },
+      { gap: 'g0', side: 'left', tag: '🧘 Attention', body: 'Downstream predictions are about *content* as well as *precision*. The latter can be interpreted as *attention*.', faded: true },
       { gap: 'g0', side: 'right', tag: 'High Precision', body: '... or *increase precision*, leading to *more errors* on mismatch.' },
       { tier: 'bot', icon: '🧘', body: '*High* precision *➡️* more pressure to resolve error *🥵*' },
     ],
